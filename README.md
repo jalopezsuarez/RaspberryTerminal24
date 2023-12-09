@@ -274,20 +274,32 @@ launcher_item_app = /home/pi/.config/tint2/poweroff.desktop
 launcher_icon_theme =
 
 # End of config
+```
 
-Una vez configurado el archivo principal se crean los enlaces ayudándonos de los archivos tipo /home/pi/.config/tint2/*.desktop
+Once the main configuration file is set up, we create taskbar shortcuts for a Control Panel and Shutdown:
 
-control.desktop
+Control Panel taskbar shortcut:
 
+```
+vi /home/pi/.config/tint2/control.desktop
+```
+
+```
 [Desktop Entry]
 Name=Panel de Control
 Comment=Panel de Control
 Exec=/home/pi/terms/bin/control.sh
 Icon=/home/pi/terms/share/tint2/control.png
 Type=Application
+```
 
-poweroff.desktop
+Shutdown taskbar shortcut:
 
+```
+vi /home/pi/.config/tint2/poweroff.desktop
+```
+
+```
 [Desktop Entry]
 Name=Apagar
 Comment=Apagar
