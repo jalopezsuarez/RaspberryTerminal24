@@ -125,6 +125,174 @@ starts &
 x11vnc -usepw -repeat -shared -forever &
 ```
 
+## XTerminal: Setting Up the XTerminal System
 
+Install the graphical Xterm console with the following command:
 
+```
+sudo apt-get install -y xterm
+```
+
+Once installed, you can enhance the console by adjusting colors and font settings in the following file:
+
+```
+vi /home/pi/.Xdefaults
+```
+
+NOTE: Leave a space at the beginning and end of the file!
+
+```
+
+XTerm*background: black
+XTerm*foreground: WhiteSmoke
+XTerm*faceSize: 11
+XTerm*faceName: DejaVu Sans Mono
+XTerm*renderFont: true
+
+```
+
+These adjustments will help you customize and improve your XTerminal experience.
+
+## Tint2: Enhancing Task Management with Tint2
+
+Tint2 provides a taskbar for displaying open windows in your window management system. To install Tint2, use the following command:
+
+```
+sudo apt-get install -y tint2
+```
+
+With Tint2, you can configure various icons to launch applications using the following file:
+
+```
+vi /home/pi/.config/tint2/tint2rc
+```
+
+This configuration simplifies Tint2 for a streamlined and efficient user experience, minimizing unnecessary features:
+
+```
+#---------------------------------------------
+# TINT2 CONFIG FILE BYLEODELACRUZ
+#---------------------------------------------
+#
+#---------------------------------------------
+# BACKGROUND AND BORDER
+#---------------------------------------------
+
+rounded = 0
+border_width = 0
+background_color = #000000 100
+border_color = #ffffff 0
+
+rounded = 0
+border_width = 0
+background_color = #5c90b8 20
+border_color = #ffffff 50
+
+rounded = 0
+border_width = 0
+background_color = #8e857c 30
+border_color = #FFFFFF 50
+
+rounded = 0
+border_width = 0
+background_color = #8e857c 30
+border_color = #ffffff 50
+
+#---------------------------------------------
+# PANEL
+#---------------------------------------------
+panel_monitor = all
+panel_items = TLC
+panel_position = bottom center
+panel_size = 100% 24k
+panel_margin = 0 0
+panel_padding = 0 0
+font_shadow = 0
+panel_background_id = 1
+wm_menu = 0
+panel_dock = 0
+panel_layer = bottom
+
+#---------------------------------------------
+# TASKBAR
+#---------------------------------------------
+#taskbar_mode = multi_desktop
+taskbar_mode = single_desktop
+taskbar_padding = 1 1 2
+taskbar_background_id = 0
+#taskbar_active_background_id = 0
+
+#---------------------------------------------
+# TASKS
+#---------------------------------------------
+task_icon = 0
+task_text = 1
+task_maximum_size = 350 24
+task_centered = 1
+task_padding = 30 0
+task_font = Sans 9
+task_font_color = #ffffff 60
+task_background_id = 3
+task_icon_asb = 100 0 0
+# replace STATUS by 'urgent', 'active' or 'iconfied'
+#task_STATUS_background_id = 2
+#task_STATUS_font_color = #ffffff 85
+#task_STATUS_icon_asb = 100 0 0
+# example:
+task_active_background_id = 4
+task_active_font_color = #ffffff 60
+#task_active_font_color = #ffffff 60
+#task_active_font_color = #ca6e59 60
+task_active_icon_asb = 100 0 0
+urgent_nb_of_blink = 8
+
+#---------------------------------------------
+# MOUSE ACTION ON TASK
+#---------------------------------------------
+mouse_middle = none
+mouse_right = none
+mouse_scroll_up = none
+mouse_scroll_down = none
+
+#---------------------------------------------
+# CLOCK
+#---------------------------------------------
+time1_format = %a %H:%M
+time1_font = DejaVu Sans Bold 9
+clock_font_color = #ffffff 76
+clock_padding = 6 0 3
+clock_background_id = 0
+
+#---------------------------------------------
+# LAUNCHER
+#---------------------------------------------
+launcher_padding = 0 0 3
+launcher_background_id = 1
+launcher_icon_size = 24
+launcher_item_app = /home/pi/.config/tint2/control.desktop
+launcher_item_app = /home/pi/.config/tint2/poweroff.desktop
+launcher_icon_theme =
+
+# End of config
+
+Una vez configurado el archivo principal se crean los enlaces ayudándonos de los archivos tipo /home/pi/.config/tint2/*.desktop
+
+control.desktop
+
+[Desktop Entry]
+Name=Panel de Control
+Comment=Panel de Control
+Exec=/home/pi/terms/bin/control.sh
+Icon=/home/pi/terms/share/tint2/control.png
+Type=Application
+
+poweroff.desktop
+
+[Desktop Entry]
+Name=Apagar
+Comment=Apagar
+Exec=/home/pi/terms/bin/poweroff.sh
+Icon=/home/pi/terms/share/tint2/poweroff.png
+Type=Application
+```
 
