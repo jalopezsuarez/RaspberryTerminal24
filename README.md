@@ -47,8 +47,58 @@ After installing Debian Lite, the first step is to update the software repositor
 sudo apt-get update
 ```
 
-### Titulo3
+## VIM: Fixing Arrow Key Issues in Vim Editor for Console
+
+To address special key issues, such as arrow keys and delete functions, within the console editor, you can use the following commands:
+
+For the current user (pi):
+```
+echo "set nocompatible" > ~/.vimrc
+echo "set backspace=indent,eol,start" >> ~/.vimrc
+```
+
+For the root user:
+```
+sudo su
+echo "set nocompatible" > ~/.vimrc
+echo "set backspace=indent,eol,start" >> ~/.vimrc
+```
+
+## Network: Customizing the Hostname for Network Identification
+
+To improve network identification, change the default hostname 'raspberrypi' to 'terminal' using the following commands. Replace 'raspberrypi' with 'terminal' and save the file:
 
 ```
-code
+sudo vi /etc/hostname
+terminal
 ```
+
+```
+sudo vi /etc/hosts
+127.0.1.1 terminal
+```
+
+## X-Window: Installing a Minimal X-Window System
+
+To set up a minimal X-Window system, use the following command. This command will install the necessary components for a minimal X-Window environment without additional recommended packages.
+
+```
+sudo apt-get install -y --no-install-recommends xinit xserver-xorg
+```
+
+## Openbox: Configuring Openbox Window Manager for Raspberry Pi
+
+The Openbox window manager for XWindow is a minimalist option that consumes only 7MB of memory, making it ideal for low-capacity devices like Raspberry Pi. After installing Openbox, you can apply the 'win10mod.obt' theme to give your windows a Windows 10-style appearance.
+
+To install Openbox, use the following command:
+
+```
+sudo apt-get install -y openbox
+```
+
+To manually start XWindow after installing Openbox, use the following command:
+
+```
+startx
+```
+
