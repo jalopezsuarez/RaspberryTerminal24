@@ -110,7 +110,10 @@ Install necessary fonts and VNC server:
 
 ```
 sudo apt-get install -y xfonts-75dpi xfonts-100dpi
-sudo apt-get -y install x11vnc
+```
+
+```
+sudo apt-get install -y x11vnc
 ```
 
 Create a password for your VNC access credentials:
