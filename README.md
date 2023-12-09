@@ -39,7 +39,7 @@ raspi-config :: 3 Interface Options :: I1 SSH
 raspi-config :: 6 Advanced Options :: A1 Expand filesystem
 ```
 
-## Updating the System Repository
+### Updating the System Repository
 
 After installing Debian Lite, the first step is to update the software repository using the following command:
 
@@ -86,7 +86,7 @@ To set up a minimal X-Window system, use the following command. This command wil
 sudo apt-get install -y --no-install-recommends xinit xserver-xorg
 ```
 
-## Openbox: Configuring Openbox Window Manager for Raspberry Pi
+### Openbox: Configuring Openbox Window Manager for Raspberry Pi
 
 The Openbox window manager for XWindow is a minimalist option that consumes only 7MB of memory, making it ideal for low-capacity devices like Raspberry Pi. After installing Openbox, you can apply the 'win10mod.obt' theme to give your windows a Windows 10-style appearance.
 
@@ -101,4 +101,30 @@ To manually start XWindow after installing Openbox, use the following command:
 ```
 startx
 ```
+
+## VNC Service: Setting Up VNC Server with x11vnc
+
+For VNC server functionality, we recommend using x11vnc.
+
+Install necessary fonts and VNC server:
+
+```
+sudo apt-get install -y xfonts-75dpi xfonts-100dpi
+sudo apt-get -y install x11vnc
+```
+
+Create a password for your VNC access credentials:
+
+```
+x11vnc -storepasswd
+```
+
+Start x11vnc with password authentication, repeat, sharing, and continuous operation:
+```
+starts &
+x11vnc -usepw -repeat -shared -forever &
+```
+
+
+
 
