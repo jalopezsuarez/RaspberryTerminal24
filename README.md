@@ -135,7 +135,7 @@ sudo ldconfig
 Para comenzar hay que disponer de la estructura de directorios y recursos necesarios para poner en marcha el sistema thinclient. Descomprimir el archivo control-terms.tgz que contiene toda la estrucutra y ficheros necesarios para el sistema:
 
 ```
-cd ~
+cd
 tar zxvf control-terms.tgz
 ```
 
