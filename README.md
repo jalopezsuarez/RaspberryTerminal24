@@ -111,6 +111,12 @@ sudo vi /etc/hosts
 127.0.1.1 terminal
 ```
 
+Ensure that the changes take effect immediately, you can either log out and log back in or reboot your system
+
+```
+sudo reboot
+```
+
 ### System: Purge and Update System References Repository
 
 Update the software repository using the following command which update library dependencies, clean and purge system libraries:
