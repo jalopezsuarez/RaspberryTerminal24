@@ -71,7 +71,11 @@ sudo dpkg-reconfigure keyboard-configuration
 ```
 
 ```
-Generic 105-key (Intl) PC -> Spanish -> The default for the keyboard layout -> No compose key -> Control+Alt+Backspace to terminate the X server? NO
+Generic 105-key (Intl) PC ->
+Spanish ->
+The default for the keyboard layout ->
+No compose key ->
+Control+Alt+Backspace to terminate the X server? NO
 ```
 
 Ensure that the changes take effect immediately, you can either log out and log back in or reboot your system
@@ -305,6 +309,34 @@ Start x11vnc with password authentication, repeat, sharing, and continuous opera
 starts &
 x11vnc -usepw -repeat -shared -forever &
 ```
+
+### System Autologin
+
+Desde la utilidad raspi-config podemos preparar el arranque automatico en modo grafico. Instalamos el gestor de login para poder disponer del arranque automatico grafico:
+
+```
+sudo apt-get install -y lightdm
+```
+
+Nos vamos a la utilidad de raspi-config y establecemos las opciones de arranque automático
+
+```
+sudo raspi-config 
+Raspi-Config :: 1 System Options :: S5 Boot / Auto Login :: B4 Desktop Autologin (pi user)
+```
+
+XWindow desactivar modo reposo (pantalla negra) y configurar el box para evitar que se active el modo reposo:
+
+```
+sudo vi /etc/lightdm/lightdm.conf
+```
+
+```
+[SeatDefaults]
+xserver-command=X -s 0 -dpms
+```
+
+This will set your blanking timeout to 0 seconds and turn off your display power management singling. Se puede modificar el tiempo de 0 a n segundos para configurarlo.
 
 ## Tint2: Enhancing Task Management with Tint2
 
