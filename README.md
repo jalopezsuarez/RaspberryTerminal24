@@ -62,9 +62,27 @@ echo "set nocompatible" > ~/.vimrc
 echo "set backspace=indent,eol,start" >> ~/.vimrc
 ```
 
+### Keyboard Setup
+
+A command-line program to help you change keyboard layout to SPANISH.
+
+```
+sudo dpkg-reconfigure keyboard-configuration
+```
+
+```
+Generic 105-key (Intl) PC -> Spanish -> The default for the keyboard layout -> No compose key -> Control+Alt+Backspace to terminate the X server? NO
+```
+
+Ensure that the changes take effect immediately, you can either log out and log back in or reboot your system
+
+```
+sudo reboot
+```
+
 ### Configure System Default Locale Language 
 
-Enable only the Spanish (es_ES.UTF-8) locale: In the configuration dialog, scroll down and find es_ES.UTF-8 in the list. Use the arrow keys to select it and press the spacebar to mark it with an asterisk (*). Press "Tab" to highlight the "OK" button, and then press "Enter" to confirm your selection:
+Enable only the SPANISH (es_ES.UTF-8) locale: In the configuration dialog, scroll down and find es_ES.UTF-8 in the list. Use the arrow keys to select it and press the spacebar to mark it with an asterisk (*). Press "Tab" to highlight the "OK" button, and then press "Enter" to confirm your selection:
 
 ```
 sudo dpkg-reconfigure locales
