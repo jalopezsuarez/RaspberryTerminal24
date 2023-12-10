@@ -52,12 +52,14 @@ sudo apt-get update
 To address special key issues, such as arrow keys and delete functions, within the console editor, you can use the following commands:
 
 For the current user (pi):
+
 ```
 echo "set nocompatible" > ~/.vimrc
 echo "set backspace=indent,eol,start" >> ~/.vimrc
 ```
 
 For the root user:
+
 ```
 sudo su
 echo "set nocompatible" > ~/.vimrc
@@ -123,6 +125,7 @@ x11vnc -storepasswd
 ```
 
 Start x11vnc with password authentication, repeat, sharing, and continuous operation:
+
 ```
 starts &
 x11vnc -usepw -repeat -shared -forever &
@@ -286,7 +289,6 @@ Control Panel taskbar shortcut:
 ```
 vi /home/pi/.config/tint2/control.desktop
 ```
-
 ```
 [Desktop Entry]
 Name=Panel de Control
@@ -301,7 +303,6 @@ Shutdown taskbar shortcut:
 ```
 vi /home/pi/.config/tint2/poweroff.desktop
 ```
-
 ```
 [Desktop Entry]
 Name=Apagar
@@ -311,3 +312,49 @@ Icon=/home/pi/terms/share/tint2/poweroff.png
 Type=Application
 ```
 
+## Build: Essential Dependencies for Debian Source Code Compilation
+
+Automatically installs essential dependencies required for compiling applications from source code on Linux Debian systems, ensuring a smooth and successful compilation process.
+
+```
+sudo apt-get install -y build-essential
+```
+```
+sudo apt-get install -y make automake cmake git subversion checkinstall unzip libtool
+```
+
+## iDesktop: Lightweight Linux Desktop Management
+
+iDesktop is a tool that enables efficient customization and administration of the desktop environment in Linux systems. It can be obtained from the official website on SourceForge with version 0.7.5 or from the GitHub repository with the latest version 0.7.8.
+```
+https://sourceforge.net/projects/idesk/ (0.7.5)
+https://github.com/neagix/idesk (latest version 0.7.8)
+```
+
+### iDesktop: Latest Version Compilation and Installation
+
+The compilation option obtains the most recent version of iDesktop directly from the official application's source code repository. This process includes both compiling and installing iDesktop. The following steps are undertaken to complete this procedure:
+
+Install necessary dependencies using the following command:
+```
+sudo apt-get install -y libx11-dev libimlib2-dev libxft-dev
+```
+
+Download the latest version (v0.7.8) from the official GitHub repository with the command:
+```
+wget https://github.com/neagix/idesk/archive/refs/tags/v0.7.8.tar.gz
+```
+
+Execute the following commands to build and install the application:
+```
+** OFICIAL
+autoreconf --install
+./configure
+make -j
+sudo make install
+```
+
+Once completed, iDesktop will be installed in directory: 
+```
+/usr/share/idesk
+```
