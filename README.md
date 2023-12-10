@@ -1,4 +1,4 @@
-## Creating Thin Client System for Industrial Environments with Raspberry Pi and Debian OS
+## Terminal Thinclient for Industrial Environments with Raspberry Pi and Debian OS
 
 Creating a thin client terminal using Raspberry Debian OS, customized for industrial settings, leveraging the Raspberry Pi barebone built on ARM architecture.
 
@@ -30,7 +30,7 @@ User: pi
 Password: [PASS]
 ```
 
-### Advanced Configuration Settings for Barebone and Debian System to Maximize SD Card Storage
+### Advanced Configuration Settings for Raspberry Barebone Debian Linux System
 
 Using the configuration utility, access advanced settings for both the barebone hardware and Debian OS to ensure optimal SD card storage utilization, with automatic file system expansion during installation.
 
@@ -62,43 +62,23 @@ echo "set nocompatible" > ~/.vimrc
 echo "set backspace=indent,eol,start" >> ~/.vimrc
 ```
 
-### Keyboard Setup
+### Setting System Language and Keyboard Layout
 
-A command-line program to help you change keyboard layout to SPANISH.
+Raspberry Debian Linux Thinclient system should now be using SPANISH (es_ES.UTF-8) as the default system language and have the correct time zone set to Europe/Madrid.
 
-```
-sudo dpkg-reconfigure keyboard-configuration
-```
-
-```
-Generic 105-key (Intl) PC ->
-Spanish ->
-The default for the keyboard layout ->
-No compose key ->
-Control+Alt+Backspace to terminate the X server? NO
-```
-
-Ensure that the changes take effect immediately, you can either log out and log back in or reboot your system
-
-```
-sudo reboot
-```
-
-### Configure System Default Locale Language 
-
-Enable only the SPANISH (es_ES.UTF-8) locale: In the configuration dialog, scroll down and find es_ES.UTF-8 in the list. Use the arrow keys to select it and press the spacebar to mark it with an asterisk (*). Press "Tab" to highlight the "OK" button, and then press "Enter" to confirm your selection:
+In the configuration dialog, scroll down and find es_ES.UTF-8 in the list. Use the arrow keys to select it and press the spacebar to mark it with an asterisk (*). Press "Tab" to highlight the "OK" button, and then press "Enter" to confirm your selection:
 
 ```
 sudo dpkg-reconfigure locales
 ```
 
-Navigate through the menu to find "Europe" and then select "Madrid." This will set your time zone to Europe/Madrid. Press "Enter" to confirm your selection:
+Navigate through the menu to find EUROPE and then select MADRID. This will set your time zone to Europe/Madrid:
 
 ```
 sudo dpkg-reconfigure tzdata
 ```
 
-Raspberry Debian Linux Thinclient system should now be using SPANISH as the default system language and have the correct time zone set to Europe/Madrid.
+Set system default language and character encoding permanent in operatin system environment:
 
 ```
 sudo vi /etc/bash.bashrc
@@ -111,6 +91,20 @@ export LC_ALL="es_ES.UTF-8"
 export LC_CTYPE="es_ES.UTF-8"
 export LC_LANG="es_ES.UTF-8"
 export LANG="es_ES.UTF-8"
+```
+
+Set keyboard layout to SPANISH with Debian command-line utility:
+
+```
+sudo dpkg-reconfigure keyboard-configuration
+```
+
+```
+Generic 105-key (Intl) PC ->
+Spanish ->
+The default for the keyboard layout ->
+No compose key ->
+Control+Alt+Backspace to terminate the X server? NO
 ```
 
 Ensure that the changes take effect immediately, you can either log out and log back in or reboot your system
@@ -137,6 +131,18 @@ Ensure that the changes take effect immediately, you can either log out and log 
 
 ```
 sudo reboot
+```
+
+### System: Essential Dependencies for Build
+
+Automatically installs essential dependencies required for compiling applications from source code on Linux Debian systems, ensuring a smooth and successful compilation process.
+
+```
+sudo apt-get install -y build-essential
+```
+
+```
+sudo apt-get install -y make automake cmake git subversion checkinstall unzip libtool
 ```
 
 ### System: Purge and Update System References Repository
@@ -230,12 +236,6 @@ To install Openbox, use the following command:
 
 ```
 sudo apt-get install -y openbox
-```
-
-To manually start XWindow after installing Openbox, use the following command:
-
-```
-startx
 ```
 
 ### X-Window VNC Service: Setting Up VNC Server with x11vnc
@@ -448,30 +448,23 @@ Icon=/home/pi/terms/share/tint2/poweroff.png
 Type=Application
 ```
 
-## Build: Essential Dependencies for Debian Source Code Compilation
-
-Automatically installs essential dependencies required for compiling applications from source code on Linux Debian systems, ensuring a smooth and successful compilation process.
-
-```
-sudo apt-get install -y build-essential
-```
-
-```
-sudo apt-get install -y make automake cmake git subversion checkinstall unzip libtool
-```
-
 ## iDesktop: Lightweight Linux Desktop Management
 
 iDesktop is a tool that enables efficient customization and administration of the desktop environment in Linux systems. It can be obtained from the official website on SourceForge with version 0.7.5 or from the GitHub repository with the latest version 0.7.8.
 
 ```
 https://sourceforge.net/projects/idesk/ (0.7.5)
-https://github.com/neagix/idesk (latest version 0.7.8)
 ```
 
-### iDesktop: Latest Version Compilation and Installation
+###  iDesk Installation Script with Dependency Fixes
 
-The compilation option obtains the most recent version of iDesktop directly from the official application's source code repository. This process includes both compiling and installing iDesktop. The following steps are undertaken to complete this procedure:
+This script addresses dependency issues by downloading the official Debian repository version of iDesk with necessary patches applied, ensuring a smooth installation on Debian (MIPS64el) systems.
+
+```
+https://packages.debian.org/source/bookworm/mips64el/idesk
+```
+
+### iDesk Installation on Debian Sources
 
 Install necessary dependencies using the following command:
 
@@ -479,17 +472,30 @@ Install necessary dependencies using the following command:
 sudo apt-get install -y libx11-dev libxext-dev libice-dev libxft-dev libimlib2-dev
 ```
 
-Download the latest version (v0.7.8) from the official GitHub repository with the command:
+Download sources from the official Debian repository with the command:
 
 ```
-cd ~/terms/repos
-wget https://github.com/neagix/idesk/archive/refs/tags/v0.7.8.tar.gz
-tar zxvf v0.7.8.tar.gz
+mkdir ~/terms/repos/idesk
+cd ~/terms/repos/idesk
+```
+
+```
+wget http://deb.debian.org/debian/pool/main/i/idesk/idesk_0.7.5-7.dsc
+wget http://deb.debian.org/debian/pool/main/i/idesk/idesk_0.7.5.orig.tar.gz
+wget http://deb.debian.org/debian/pool/main/i/idesk/idesk_0.7.5-7.debian.tar.xz
+```
+
+Prepare and patch the official sources for Debian with patches:
+
+```
+dpkg-source -x idesk_0.7.5-7.dsc
 ```
 
 Execute the following commands to build and install the application:
 
 ```
+cd idesk-0.7.5
+autoconf
 ./configure
 make -j
 sudo make install
@@ -499,30 +505,6 @@ Once completed, iDesktop will be installed in directory:
 
 ```
 /usr/share/idesk
-```
-
-### imlib2: Problems with default Debian imbli2 library (missing imglib2-config)
-
-Download version 1.4.2 of 'imlib2' the most recent release that includes the 'imlib2-config' utility required for compiling iDesktop.
-
-```
-cd ~/terms/repos
-wget https://github.com/kkoudev/imlib2/archive/refs/tags/v1.4.2.tar.gz
-tar zxvf v1.4.2.tar.gz
-```
-
-Perform the following steps for 'imlib2-config' configuration:
-
-```
-sudo cp /usr/include/freetype2/ft2build.h /usr/include/ft2build.h
-sudo ln -s /usr/include/freetype2/freetype /usr/include/freetype
-```
-
-```
-./autogen.sh
-make -j
-sudo make install
-sudo cp imlib2-config /usr/bin
 ```
 
 ### iDesktop Configuration
@@ -585,7 +567,7 @@ table Actions
 end
 ```
 
-## Conky Version 1.9.0 Compilation and Configuration
+## Conky Compilation and Configuration (version 1.9.0)
 
 This guide assists in compiling and configuring Conky, a system monitor tool.
 
@@ -595,7 +577,7 @@ Intall required dependencies:
 sudo apt-get install -y libncurses5-dev lua5.1 liblua5.1-0-dev libiw-dev libxdamage-dev libasound2-dev docbook2x xsltproc
 ```
 
-Download Conky Version 1.9.0 from official source:
+Download Conky 1.9.0 from official source:
 
 ```
 cd ~/terms/repos
@@ -786,15 +768,10 @@ chmod +x ~/.config/openbox/autostart.sh
 x11vnc -usepw -repeat -shared -forever &
 
 # Windows Envoronment
-#(python /home/pi/terms/bin/remmina.py && idesk) &
+#python /home/pi/terms/bin/remmina.py
 idesk &
 tint2 &
 conky -q &
-
-# Keyboard Touch
-if [ -f /home/pi/terms/var/keyboard.enabled ] ; then
-   (/usr/bin/florence) &
-fi
 
 # Monopuesto Service
 if [ -f /home/pi/terms/var/monopuesto.enabled ] ; then
@@ -815,14 +792,13 @@ Setting up a specific version of Java 8 Development Envronment and Maven 3 Depen
 sudo apt install -y libx11-dev libxtst-dev
 ```
 
-
 ### Java Development Enviroment
 
 ```
 sudo mkdir /usr/lib/jvm
-sudo cp ~/terms/repos/jdk-8u201-linux-arm64-vfp-hflt.tar.gz /usr/lib/jvm
+sudo cp ~/terms/repos/jdk-8u271-linux-aarch64.tar.gz /usr/lib/jvm
 cd /usr/lib/jvm
-sudo tar zxvf jdk-8u201-linux-arm64-vfp-hflt.tar.gz
+sudo tar zxvf jdk-8u271-linux-aarch64.tar.gz
 sudo mv [EXTRACTED] jdk8
 ```
 
@@ -890,6 +866,7 @@ mkdir ~/terms/repos/freerdp_build
 cd ~/terms/repos/freerdp_build
 wget https://github.com/FreeRDP/FreeRDP/files/12670558/freerdp-2.11.2.tar.gz
 tar zxvf freerdp-2.11.2.tar.gz
+mv [EXTRACTED] freerdp
 ```
 
 ```
@@ -937,6 +914,7 @@ mkdir ~/terms/repos/remmina_build
 cd ~/terms/repos/remmina_build
 wget https://gitlab.com/Remmina/Remmina/-/archive/v.1.4.33/Remmina-v.1.4.33.tar.gz
 tar zxvf Remmina-v.1.4.33.tar.gz
+mv [EXTRACTED] remmina
 ```
 
 ```
