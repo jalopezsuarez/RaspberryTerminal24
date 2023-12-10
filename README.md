@@ -168,51 +168,6 @@ tar zxvf control-terms.tgz
 ~/terms/var [CONTROL DE ESTADO]
 ```
 
-## Embebed ARM Java / Maven Enviroment
-
-Setting up a specific version of Java 8 Development Envronment and Maven 3 Dependency Management optimized for embedded thin client systems on Barebone Raspberry Pi Systems.
-
-### Java Development Enviroment
-
-```
-sudo mkdir /usr/lib/jvm
-sudo cp ~/terms/repos/jdk-8u201-linux-arm64-vfp-hflt.tar.gz /usr/lib/jvm
-cd /usr/lib/jvm
-sudo tar zxvf jdk-8u201-linux-arm64-vfp-hflt.tar.gz
-sudo mv [EXTRACTED] jdk8
-```
-
-### Maven Java Dependency Management
-
-```
-sudo mkdir /usr/lib/mvn
-sudo cp ~/terms/repos/apache-maven-3.3.9-bin.tar.gz /usr/lib/mvn
-cd /usr/lib/mvn
-sudo tar zxvf apache-maven-3.3.9-bin.tar.gz
-mv [EXTRACTED] maven3
-```
-
-### System Default Java and Maven Environment
-
-Configure default Java and Maven environment system configuration for Raspberry Debian Linux:
-
-```
-sudo vi /etc/profile
-```
-
-```
-# System Default Java and Maven Environment
-export JAVA_HOME=/usr/lib/jvm/jdk8
-export M2_HOME=/usr/lib/mvn/maven3
-export PATH=$PATH:$JAVA_HOME/bin:$M2_HOME/bin
-```
-
-Ensure that the changes take effect immediately, you can either log out and log back in or reboot your system
-
-```
-sudo reboot
-```
-
 ## X-Window: Installing a Minimal X-Window System
 
 To set up a minimal X-Window system, use the following command. This command will install the necessary components for a minimal X-Window environment without additional recommended packages.
@@ -852,6 +807,56 @@ if [ -f /home/pi/terms/var/autorun.enabled ] ; then
 fi  
 ```
 
+## Embebed ARM Java / Maven Enviroment
+
+Setting up a specific version of Java 8 Development Envronment and Maven 3 Dependency Management optimized for embedded thin client systems on Barebone Raspberry Pi Systems.
+
+```
+sudo apt install -y libx11-dev libxtst-dev
+```
+
+
+### Java Development Enviroment
+
+```
+sudo mkdir /usr/lib/jvm
+sudo cp ~/terms/repos/jdk-8u201-linux-arm64-vfp-hflt.tar.gz /usr/lib/jvm
+cd /usr/lib/jvm
+sudo tar zxvf jdk-8u201-linux-arm64-vfp-hflt.tar.gz
+sudo mv [EXTRACTED] jdk8
+```
+
+### Maven Java Dependency Management
+
+```
+sudo mkdir /usr/lib/mvn
+sudo cp ~/terms/repos/apache-maven-3.3.9-bin.tar.gz /usr/lib/mvn
+cd /usr/lib/mvn
+sudo tar zxvf apache-maven-3.3.9-bin.tar.gz
+mv [EXTRACTED] maven3
+```
+
+### System Default Java and Maven Environment
+
+Configure default Java and Maven environment system configuration for Raspberry Debian Linux:
+
+```
+sudo vi /etc/bash.bashrc
+```
+
+```
+# System Default Java and Maven Environment
+export JAVA_HOME=/usr/lib/jvm/jdk8
+export M2_HOME=/usr/lib/mvn/maven3
+export PATH=$PATH:$JAVA_HOME/bin:$M2_HOME/bin
+```
+
+Ensure that the changes take effect immediately, you can either log out and log back in or reboot your system
+
+```
+sudo reboot
+```
+
 ## Remmina / FreeRDP: Build Remmina and FreeRDP (latest 2023 stable)
 
 Compilation and installation of the Remmina and FreeRDP tools in their stable versions on a Raspberry Debian Linux system. To achieve this, the script performs the following actions:
@@ -906,7 +911,6 @@ sudo ln -s /opt/remmina/freerdp/bin/xfreerdp /usr/local/bin/
 echo /opt/remmina/freerdp/lib | sudo tee /etc/ld.so.conf.d/freerdp_devel.conf > /dev/null
 sudo ldconfig
 ```
-
 
 ### Remmina
 
