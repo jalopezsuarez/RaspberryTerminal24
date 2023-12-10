@@ -11,13 +11,17 @@ Release: December 5th 2023
 Compatible: 3B, 3B+, 3A+, 4B, 400, 5, CM3, CM3+, CM4, CM4S, Zero 2 W
 ```
 
-## Flashing the official image onto an 8GB SD Card with Raspberry Pi Imager
+### Flashing the official image onto an 8GB SD Card with Raspberry Pi Imager
 
 Utilizing the official Raspberry Pi Imager program version 1.8.1 to install the image onto an 8 GB SD Card for system deployment.
 
 ```
 2023-12-05-raspios-bookworm-arm64-lite.img.xz
 ```
+
+## System: Initial Setup and Advanced Customization for Debian Systems
+
+Essential configurations for Raspberry Debian-based systems.
 
 ###  User and Password Configuration on First Boot
 
@@ -39,15 +43,7 @@ raspi-config :: 3 Interface Options :: I1 SSH
 raspi-config :: 6 Advanced Options :: A1 Expand filesystem
 ```
 
-### Updating the System Repository
-
-After installing Debian Lite, the first step is to update the software repository using the following command:
-
-```
-sudo apt-get update
-```
-
-## VIM: Fixing Arrow Key Issues in Vim Editor for Console
+### VIM: Fixing Arrow Key Issues in Vim Editor for Console
 
 To address special key issues, such as arrow keys and delete functions, within the console editor, you can use the following commands:
 
@@ -66,7 +62,35 @@ echo "set nocompatible" > ~/.vimrc
 echo "set backspace=indent,eol,start" >> ~/.vimrc
 ```
 
-## Network: Customizing the Hostname for Network Identification
+### Configure System Default Locale Language 
+
+Configure the system locale in a Debian-based system, addressing common issues
+
+Realizar el cambio en el siguiente archivo,
+
+```
+sudo vi /etc/profile
+```
+
+Setting multiple environment variables to establish "SPANISH" as the default system language:
+
+```
+# System Default Language 
+export LANGUAGE="es_ES.UTF-8"
+export LC_ALL="es_ES.UTF-8"
+export LC_CTYPE="es_ES.UTF-8"
+export LC_LANG="es_ES.UTF-8"
+export LANG="es_ES.UTF-8"
+```
+
+Seleccionar es_ES.UTF-8 como idioma por defecto del sistema:
+
+```
+sudo dpkg-reconfigure locales
+sudo dpkg-reconfigure tzdata
+```
+
+### Network: Customizing the Hostname for Network Identification
 
 To improve network identification, change the default hostname 'raspberrypi' to 'terminal' using the following commands. Replace 'raspberrypi' with 'terminal' and save the file:
 
@@ -78,6 +102,19 @@ terminal
 ```
 sudo vi /etc/hosts
 127.0.1.1 terminal
+```
+
+### System: Purge and Update System References Repository
+
+Update the software repository using the following command which update library dependencies, clean and purge system libraries:
+
+```
+sudo apt-get update
+sudo apt-get -y autoremove --purge
+sudo apt-get autoclean
+sudo apt-get autoremove
+sudo apt-get clean
+sudo ldconfig
 ```
 
 ## X-Window: Installing a Minimal X-Window System
@@ -705,4 +742,23 @@ To optimize Remmina's thin client mode, simplify the toolbar by removing non-ess
 ```
 rcw.c -> /* Duplicate session */
 ```
-- 
+
+## Extra Supplementary Software Packages
+
+Installation of supplementary software packages:
+
+### wpa_gui - WPA Graphical User Interface
+
+Graphical User Interface (GUI) tool designed for configuring Wi-Fi networks on the Debian Linux system. It is built upon the QT libraries from the KDE environment and serves as a graphical frontend for interacting with wpa_supplicant. This tool enables users to query the current network status, modify configuration settings, and request interactive user input when needed.
+
+```
+sudo apt-get install -y wpagui
+```
+
+### Geany
+
+Geany is a powerful, stable and lightweight programmer's text editor that provides tons of useful features without bogging down your workflow and has built-in support for programming languages.
+
+```
+sudo apt-get install -y geany
+```
