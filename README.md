@@ -64,7 +64,19 @@ echo "set backspace=indent,eol,start" >> ~/.vimrc
 
 ### Configure System Default Locale Language 
 
-Configure the system locale in a Debian-based system, setting multiple environment variables to establish "SPANISH" as the default system language:
+Enable only the Spanish (es_ES.UTF-8) locale: In the configuration dialog, scroll down and find es_ES.UTF-8 in the list. Use the arrow keys to select it and press the spacebar to mark it with an asterisk (*). Press "Tab" to highlight the "OK" button, and then press "Enter" to confirm your selection:
+
+```
+sudo dpkg-reconfigure locales
+```
+
+Navigate through the menu to find "Europe" and then select "Madrid." This will set your time zone to Europe/Madrid. Press "Enter" to confirm your selection:
+
+```
+sudo dpkg-reconfigure tzdata
+```
+
+Raspberry Debian Linux Thinclient system should now be using SPANISH as the default system language and have the correct time zone set to Europe/Madrid.
 
 ```
 sudo vi /etc/profile
@@ -79,11 +91,10 @@ export LC_LANG="es_ES.UTF-8"
 export LANG="es_ES.UTF-8"
 ```
 
-Seleccionar es_ES.UTF-8 como idioma por defecto del sistema:
+Ensure that the changes take effect immediately, you can either log out and log back in or reboot your system
 
 ```
-sudo dpkg-reconfigure locales
-sudo dpkg-reconfigure tzdata
+sudo reboot
 ```
 
 ### Network: Customizing the Hostname for Network Identification
