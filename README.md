@@ -1011,10 +1011,52 @@ code
 
 ## Splash Boot Screen (Plymouth native official)
 
-text
+Plymouth presents a graphic animation (also known as a bootsplash) while the system boots:
 
 ```
-code
+sudo cp ~/terms/share/plymouth/darwin-170649.tgz /usr/share/plymouth/themes/
+cd /usr/share/plymouth/themes/
+sudo tar zxvf darwin-170649.tgz
+sudo rm -rf darwin-170649.tgz
+```
+
+```
+sudo plymouth-set-default-theme darwin
+sudo update-initramfs -u
+```
+
+```
+sudo vi /boot/cmdline.txt
+```
+
+Add following commands after rootwait:
+
+```
+loglevel=0 vt.global_cursor_default=0 logo.nologo quiet splash plymouth.enable=1 plymouth.ignore-serial-consoles
+```
+
+Here are brief explanations:
+
+```
+loglevel=0: removes most of the messages from the boot
+vt.global_cursor_default=0: removes blinking cursor.
+logo.nologo: removes Raspberry Pi logo in top left corner.
+quiet: disable boot message texts
+splash: enables splash image
+plymouth.enable=1: enable Plymouth splash
+plymouth.ignore-serial-consoles: if you are going to use Plymouth, add this.
+```
+
+You might also try adding the following to /boot/config.txt to disable the rainbow splash if it bothers you:
+
+```
+sudo vi /boot/config.txt
+```
+
+```
+# Suppress splash/warnings
+disable_splash=1
+avoid_warnings=1
 ```
 
 ## Supplementary Software Packages
