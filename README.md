@@ -64,15 +64,11 @@ echo "set backspace=indent,eol,start" >> ~/.vimrc
 
 ### Configure System Default Locale Language 
 
-Configure the system locale in a Debian-based system, addressing common issues
-
-Realizar el cambio en el siguiente archivo,
+Configure the system locale in a Debian-based system, setting multiple environment variables to establish "SPANISH" as the default system language:
 
 ```
 sudo vi /etc/profile
 ```
-
-Setting multiple environment variables to establish "SPANISH" as the default system language:
 
 ```
 # System Default Language 
@@ -117,6 +113,59 @@ sudo apt-get clean
 sudo ldconfig
 ```
 
+## Terminal Thinclient Resources and Assets
+
+Para comenzar hay que disponer de la estructura de directorios y recursos necesarios para poner en marcha el sistema thinclient. Descomprimir el archivo control-terms.tgz que contiene toda la estrucutra y ficheros necesarios para el sistema:
+
+```
+cd ~
+tar zxvf control-terms.tgz
+```
+
+```
+~/terms/bin [APLICACIONES EJECUTABLES]
+~/terms/repos [DESCARGAS ORIGINALES]
+~/terms/share [RECURSOS COMPARTIDOS]
+~/terms/var [CONTROL DE ESTADO]
+```
+
+## Embebed ARM Java / Maven Enviroment
+
+Setting up a specific version of Java 8 Development Envronment and Maven 3 Dependency Management optimized for embedded thin client systems on Barebone Raspberry Pi Systems.
+
+### Java Development Enviroment
+
+```
+sudo mkdir /usr/lib/jvm
+sudo cp ~/terms/repos/jdk-8u201-linux-arm64-vfp-hflt.tar.gz /usr/lib/jvm
+tar zxvf jdk-8u201-linux-arm32-vfp-hflt.tar.gz
+mv [EXTRACTED] jdk8
+```
+
+### Maven Java Dependency Management
+
+```
+sudo mkdir /usr/lib/mvn
+sudo cp ~/terms/repos/apache-maven-3.3.9-bin.tar.gz /usr/lib/mvn
+tar zxvf apache-maven-3.3.9-bin.tar.gz
+mv [EXTRACTED] maven3
+```
+
+### System Default Java and Maven Environment
+
+Configure default Java and Maven environment system configuration for Raspberry Debian Linux:
+
+```
+sudo vi /etc/profile
+```
+
+```
+# System Default Java and Maven Environment
+export JAVA_HOME=/usr/lib/jvm/jdk8
+export M2_HOME=/usr/lib/mvn/maven3
+export PATH=$PATH:$JAVA_HOME/bin:$M2_HOME/bin
+```
+
 ## X-Window: Installing a Minimal X-Window System
 
 To set up a minimal X-Window system, use the following command. This command will install the necessary components for a minimal X-Window environment without additional recommended packages.
@@ -125,50 +174,7 @@ To set up a minimal X-Window system, use the following command. This command wil
 sudo apt-get install -y --no-install-recommends xinit xserver-xorg
 ```
 
-### Openbox: Configuring Openbox Window Manager for Raspberry Pi
-
-The Openbox window manager for XWindow is a minimalist option that consumes only 7MB of memory, making it ideal for low-capacity devices like Raspberry Pi. After installing Openbox, you can apply the 'win10mod.obt' theme to give your windows a Windows 10-style appearance.
-
-To install Openbox, use the following command:
-
-```
-sudo apt-get install -y openbox
-```
-
-To manually start XWindow after installing Openbox, use the following command:
-
-```
-startx
-```
-
-## VNC Service: Setting Up VNC Server with x11vnc
-
-For VNC server functionality, we recommend using x11vnc.
-
-Install necessary fonts and VNC server:
-
-```
-sudo apt-get install -y xfonts-75dpi xfonts-100dpi
-```
-
-```
-sudo apt-get install -y x11vnc
-```
-
-Create a password for your VNC access credentials:
-
-```
-x11vnc -storepasswd
-```
-
-Start x11vnc with password authentication, repeat, sharing, and continuous operation:
-
-```
-starts &
-x11vnc -usepw -repeat -shared -forever &
-```
-
-## XTerminal: Setting Up the XTerminal System
+### XTerminal: Setting Up the XTerminal System
 
 Install the graphical Xterm console with the following command:
 
@@ -195,6 +201,67 @@ XTerm*renderFont: true
 ```
 
 These adjustments will help you customize and improve your XTerminal experience.
+
+### X-Window Thinclient: Disabling Terminal/Console Switching in X-Windows
+
+Disabling terminal/console switching in Windows is preferable for the user experience of a thin client system. It prevents users from accessing unnecessary features, simplifying the user experience to the essentials.
+
+Open or create the file /etc/X11/xorg.conf using the following command:
+
+```
+sudo vi /etc/X11/xorg.conf
+```
+
+Add the following lines inside the file:
+
+```
+Section "ServerFlags"
+    Option "DontVTSwitch" "true"
+EndSection
+```
+
+### Openbox: Configuring Openbox Window Manager for Raspberry Pi
+
+The Openbox window manager for XWindow is a minimalist option that consumes only 7MB of memory, making it ideal for low-capacity devices like Raspberry Pi. After installing Openbox, you can apply the 'win10mod.obt' theme to give your windows a Windows 10-style appearance.
+
+To install Openbox, use the following command:
+
+```
+sudo apt-get install -y openbox
+```
+
+To manually start XWindow after installing Openbox, use the following command:
+
+```
+startx
+```
+
+### X-Window VNC Service: Setting Up VNC Server with x11vnc
+
+For VNC server functionality, we recommend using x11vnc.
+
+Install necessary fonts and VNC server:
+
+```
+sudo apt-get install -y xfonts-75dpi xfonts-100dpi
+```
+
+```
+sudo apt-get install -y x11vnc
+```
+
+Create a password for your VNC access credentials:
+
+```
+x11vnc -storepasswd
+```
+
+Start x11vnc with password authentication, repeat, sharing, and continuous operation:
+
+```
+starts &
+x11vnc -usepw -repeat -shared -forever &
+```
 
 ## Tint2: Enhancing Task Management with Tint2
 
@@ -385,7 +452,7 @@ sudo apt-get install -y libx11-dev libimlib2-dev libxft-dev
 Download the latest version (v0.7.8) from the official GitHub repository with the command:
 
 ```
-cd ~/repos
+cd ~/terms/repos
 wget https://github.com/neagix/idesk/archive/refs/tags/v0.7.8.tar.gz
 tar zxvf v0.7.8.tar.gz
 ```
@@ -426,7 +493,7 @@ cp /usr/local/share/idesk/dot.ideskrc ~/.ideskrc
 Download version 1.4.2 of 'imlib2' the most recent release that includes the 'imlib2-config' utility required for compiling iDesktop.
 
 ```
-cd ~/repos
+cd ~/terms/repos
 wget https://github.com/kkoudev/imlib2/archive/refs/tags/v1.4.2.tar.gz
 tar zxvf v1.4.2.tar.gz
 ```
@@ -456,7 +523,7 @@ sudo apt-get install -y libncurses5-dev lua5.1 liblua5.1-0-dev libiw-dev libxdam
 
 Download Conky Version 1.9.0 from official source:
 ```
-cd ~/repos
+cd ~/terms/repos
 wget https://sourceforge.net/projects/conky/files/conky/1.9.0/conky-1.9.0.tar.gz/download
 tar zxvf conky-1.9.0.tar.gz
 ```
@@ -571,6 +638,7 @@ vi ~/.config/openbox/rc.xml
 ```
 
 Disable specific key combinations, and introduce efficient keyboard shortcuts:
+
 ```
   <keyboard>
     <!-- terminal -->
@@ -595,6 +663,7 @@ Disable specific key combinations, and introduce efficient keyboard shortcuts:
 ```
 
 Minimize user interaction while maintaining control:
+
 ```
   <context name="Root">
     <!-- terminal -->
@@ -634,7 +703,7 @@ if [ -f /home/pi/terms/var/autorun.enabled ] ; then
 fi  
 ```
 
-## Remmina / FreeRDP: Compilation Script for Remmina and FreeRDP Tools (latest 2023 stable versions)
+## Remmina / FreeRDP: Build Remmina and FreeRDP (latest 2023 stable)
 
 Compilation and installation of the Remmina and FreeRDP tools in their stable versions on a Raspberry Debian Linux system. To achieve this, the script performs the following actions:
 
@@ -663,14 +732,14 @@ sudo apt-get install -y libusb-1.0-0-dev
 ```
 
 ```
-mkdir ~/repos/freerdp_build
-cd ~/repos/freerdp_build
+mkdir ~/terms/repos/freerdp_build
+cd ~/terms/repos/freerdp_build
 wget https://github.com/FreeRDP/FreeRDP/files/12670558/freerdp-2.11.2.tar.gz
 tar zxvf freerdp-2.11.2.tar.gz
 ```
 
 ```
-cd ~/repos/freerdp_build
+cd ~/terms/repos/freerdp_build
 sudo rm -rf freerdp/CMakeCache.txt freerdp/CMakeFiles
 ```
 
@@ -711,14 +780,14 @@ sudo apt-get install -y libavahi-client-dev
 ```
 
 ```
-mkdir ~/repos/remmina_build
-cd ~/repos/remmina_build
+mkdir ~/terms/repos/remmina_build
+cd ~/terms/repos/remmina_build
 wget https://gitlab.com/Remmina/Remmina/-/archive/v.1.4.33/Remmina-v.1.4.33.tar.gz
 tar zxvf Remmina-v.1.4.33.tar.gz
 ```
 
 ```
-cd ~/repos/remmina_build
+cd ~/terms/repos/remmina_build
 sudo rm -rf remmina/CMakeCache.txt remmina/CMakeFiles
 ```
 
@@ -743,7 +812,61 @@ To optimize Remmina's thin client mode, simplify the toolbar by removing non-ess
 rcw.c -> /* Duplicate session */
 ```
 
-## Extra Supplementary Software Packages
+### Remmina Extra Pro Tips
+
+Running configured connections with the following command:
+
+```
+remmina -c /home/pi/.remmina/1375746771949.remmina
+```
+
+IMPORTANT! Fix configuring keyboard layouts in Remmina for RDP between Linux and Windows connections. In the preferences, enable the option described below to ensure seamless keyboard mapping between the client and remote systems.
+
+```
+Use client keyboard mapping / Usar la asignación de teclados de cliente.
+```
+
+## Enhanced System: Raspberry Debian Linux Thinclient Optimizations (remmina / monopuesto / autorun)
+
+text
+
+```
+code
+```
+
+### Remina + iDesktop Integration (remmina.py)
+
+text
+
+```
+code
+```
+
+### Monopuesto Service (monopuesto.py)
+
+text
+
+```
+code
+```
+
+### Autorun Service
+
+text
+
+```
+code
+```
+
+## Splash Boot Screen (Plymouth native official)
+
+text
+
+```
+code
+```
+
+## Supplementary Software Packages
 
 Installation of supplementary software packages:
 
@@ -761,4 +884,52 @@ Geany is a powerful, stable and lightweight programmer's text editor that provid
 
 ```
 sudo apt-get install -y geany
+```
+
+## System Network Manual Configuration (Raspberry Debian Linux)
+
+text
+
+```
+code
+```
+
+### Manual Network Setup (network interfaces)
+
+text
+
+```
+code
+```
+
+### Manual Wi-Fi Setup (wpa_supplicant)
+
+text
+
+```
+code
+```
+
+## Extra System Tools
+
+text
+
+```
+code
+```
+
+### Extra Tools: Python2 / Python3
+
+text
+
+```
+code
+```
+
+### Extra Tools: WiringPi
+
+text
+
+```
+code
 ```
