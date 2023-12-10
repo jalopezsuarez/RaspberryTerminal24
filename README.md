@@ -347,7 +347,6 @@ wget https://github.com/neagix/idesk/archive/refs/tags/v0.7.8.tar.gz
 
 Execute the following commands to build and install the application:
 ```
-** OFICIAL
 autoreconf --install
 ./configure
 make -j
@@ -358,3 +357,229 @@ Once completed, iDesktop will be installed in directory:
 ```
 /usr/share/idesk
 ```
+
+### iDesktop Configuration
+
+The iDesktop desktop manager allows you to create icons and set your desktop wallpaper.
+
+Create a directory for iDesktop configuration (current user pi):
+```
+mkdir ~/.idesktop
+```
+
+Copy the default iDesktop configuration file to your user directory:
+```
+cp /usr/local/share/idesk/dot.ideskrc ~/.ideskrc
+```
+
+### imlib2: Problems with default Debian imbli2 library (missing imglib2-config)
+
+Download version 1.4.2 of 'imlib2' the most recent release that includes the 'imlib2-config' utility required for compiling iDesktop.
+
+```
+wget https://github.com/kkoudev/imlib2/archive/refs/tags/v1.4.2.tar.gz
+```
+
+Perform the following steps for 'imlib2-config' configuration:
+
+```
+sudo cp /usr/include/freetype2/ft2build.h /usr/include/ft2build.h
+sudo ln -s /usr/include/freetype2/freetype /usr/include/freetype
+```
+
+```
+./autogen.sh
+make -j
+sudo make install
+sudo cp imlib2-config /usr/bin
+```
+
+## Conky Version 1.9.0 Compilation and Configuration
+
+This guide assists in compiling and configuring Conky, a system monitor tool.
+
+Intall required dependencies:
+```
+sudo apt-get install -y libncurses5-dev lua5.1 liblua5.1-0-dev libiw-dev libxdamage-dev
+```
+
+Download Conky Version 1.9.0 from official source:
+```
+wget https://sourceforge.net/projects/conky/files/conky/1.9.0/
+```
+
+Fix the source code in order to compile. Edit the file 'src/conky.c' and 'src/conky.h' to add the following code modifications:
+
+```
+src/conky.c
+/* no buffers in used memory? */
+extern int no_buffers;
+enum ifup_strictness_enum ifup_strictness;
+```
+
+```
+src/conky.h
+/* if_up strictness selector 
+ * needed by conky.c and linux.c (and potentially others) */
+extern enum ifup_strictness_enum {
+    IFUP_UP,
+    IFUP_LINK,
+    IFUP_ADDR
+} ifup_strictness;
+```
+
+Build and intall Conky application:
+
+```
+./autogen.sh
+./configure --build=arm --enable-wlan
+make -j
+sudo make install
+```
+
+```
+sudo setcap cap_net_raw,cap_net_admin=eip /usr/local/bin/conky
+```
+
+Configure Conky create a file '~/.conkyrc' and insert the following configuration:
+
+```
+vi ~/.conkyrc
+```
+
+```
+background yes
+alignment top_left
+
+out_to_console no
+out_to_stderr no
+
+own_window yes
+own_window_type desktop
+own_window_transparent no
+own_window_hints undecorated,above,sticky,skip_taskbar,skip_pager
+own_window_colour black
+
+use_spacer none
+pad_percents 0
+
+gap_x 0
+gap_y 0
+
+border_width 0
+border_margin 0
+draw_borders no
+stippled_borders 0
+border_inner_margin 0
+border_outer_margin 0
+
+default_color e9e9e9
+default_outline_color white
+default_shade_color white
+
+draw_shades no
+draw_outline no
+draw_borders no
+draw_graph_borders no
+
+update_interval 1.0
+cpu_avg_samples 2
+net_avg_samples 2
+
+double_buffer yes
+no_buffers yes
+
+minimum_size 5125 16
+maximum_width 5125
+
+use_xft yes
+xftfont DejaVu Sans:size=10:weight=bold
+uppercase no
+extra_newline no
+
+TEXT 
+ ${nodename}  ${uptime}  ${execi 30 cat /sys/class/thermal/thermal_zone0/temp | awk '{print substr($0,0,3)}'}C${if_existing /sys/class/net/ppp0/operstate}  VPN${endif}${if_existing /sys/class/net/eth0/operstate up}  Ethernet ${addr eth0}${endif}${if_existing /sys/class/net/wlan0/operstate up}  Wi-Fi ${addr wlan0} ${wireless_essid wlan0} ${wireless_link_qual_perc wlan0}%${endif}  ${if_existing /sys/class/net/eth0/operstate up}eth0 ${downspeed eth0}(${totaldown eth0} descarga) / ${upspeed eth0}(${totalup eth0} subida) ${endif}${if_existing /sys/class/net/wlan0/operstate up}wlan0 ${downspeed wlan0}(${totaldown wlan0} descarga) / ${upspeed wlan0}(${totalup wlan0} subida) ${endif}
+```
+
+## Openbox Configuration and Optimizations
+
+Openbox provides a minimalist lightweight and highly customizable window manager environment for your desktop, and we'll delve into various ways configure and optimizing it to tailor to our specific needs.
+
+### Fine-tuning Openbox, enhancing your desktop experience, and maximizing productivity
+ 
+Remove native menu options, disable specific key combinations like ALT+TAB, and introduce efficient keyboard shortcuts for rapid application switching.
+
+```
+cp ~/.config/openbox/rc.xml ~/.config/openbox/rc.xml.bak
+```
+
+```
+vi ~/.config/openbox/rc.xml
+```
+
+Disable specific key combinations, and introduce efficient keyboard shortcuts:
+```
+  <keyboard>
+    <!-- terminal -->
+    <keybind key="C-A-Delete">
+      <action name="Execute">
+        <command>/home/pi/terms/bin/control.sh</command>
+      </action>
+    </keybind>
+    <keybind key="C-Right">
+      <action name="NextWindow"/>
+    </keybind>
+    <keybind key="C-Up">
+      <action name="NextWindow"/>
+    </keybind>
+    <keybind key="C-Left">
+      <action name="PreviousWindow"/>
+    </keybind>
+    <keybind key="C-Down">
+      <action name="PreviousWindow"/>
+    </keybind>
+  </keyboard>
+```
+
+Minimize user interaction while maintaining control:
+```
+  <context name="Root">
+    <!-- terminal -->
+  </context>
+```
+
+### Openbox Automatic Startup Configuration
+
+Set up Openbox for automatic execution of scripts and programs that prepare your graphical environment before initialization, automating essential tasks, from launching a VNC server to customizing your desktop environment.
+
+```
+# Openbox autostart.sh
+# Programs that will run after Openbox has started
+
+# VNC Server
+x11vnc -usepw -repeat -shared -forever &
+
+# Windows Envoronment
+#(python /home/pi/terms/bin/remmina.py && idesk) &
+idesk &
+tint2 &
+conky -q &
+
+# Keyboard Touch
+if [ -f /home/pi/terms/var/keyboard.enabled ] ; then
+   (/usr/bin/florence) &
+fi
+
+# Monopuesto Service
+if [ -f /home/pi/terms/var/monopuesto.enabled ] ; then
+   (sudo systemctl start monopuesto.service) &
+fi
+
+# Autorun Service
+if [ -f /home/pi/terms/var/autorun.enabled ] ; then
+   (sleep 8s && sudo systemctl start autorun.service) &
+fi  
+```
+
+
+- 
