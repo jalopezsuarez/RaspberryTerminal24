@@ -101,7 +101,7 @@ sudo dpkg-reconfigure tzdata
 Raspberry Debian Linux Thinclient system should now be using SPANISH as the default system language and have the correct time zone set to Europe/Madrid.
 
 ```
-sudo vi /etc/profile
+sudo vi /etc/bash.bashrc
 ```
 
 ```
