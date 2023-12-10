@@ -591,7 +591,6 @@ sudo apt-get install -y lua5.1
 sudo apt-get install -y liblua5.1-0-dev
 sudo apt-get install -y libiw-dev
 sudo apt-get install -y libxdamage-dev
-sudo apt-get install -y libasound2-dev
 sudo apt-get install -y docbook2x
 sudo apt-get install -y xsltproc
 ```
