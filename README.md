@@ -929,6 +929,7 @@ sudo apt-get install -y python3-dev
 sudo apt-get install -y libsecret-1-dev
 sudo apt-get install -y gettext
 sudo apt-get install -y libavahi-client-dev
+sudo apt-get install -y xdg-utils
 ```
 
 ```
