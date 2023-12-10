@@ -142,7 +142,7 @@ sudo apt-get install -y xterm
 Once installed, you can enhance the console by adjusting colors and font settings in the following file:
 
 ```
-vi /home/pi/.Xdefaults
+vi ~/.Xdefaults
 ```
 
 NOTE: Leave a space at the beginning and end of the file!
@@ -170,7 +170,7 @@ sudo apt-get install -y tint2
 With Tint2, you can configure various icons to launch applications using the following file:
 
 ```
-vi /home/pi/.config/tint2/tint2rc
+vi ~/.config/tint2/tint2rc
 ```
 
 This configuration simplifies Tint2 for a streamlined and efficient user experience, minimizing unnecessary features:
@@ -287,8 +287,9 @@ Once the main configuration file is set up, we create taskbar shortcuts for a Co
 Control Panel taskbar shortcut:
 
 ```
-vi /home/pi/.config/tint2/control.desktop
+vi ~/.config/tint2/control.desktop
 ```
+
 ```
 [Desktop Entry]
 Name=Panel de Control
@@ -301,8 +302,9 @@ Type=Application
 Shutdown taskbar shortcut:
 
 ```
-vi /home/pi/.config/tint2/poweroff.desktop
+vi ~/.config/tint2/poweroff.desktop
 ```
+
 ```
 [Desktop Entry]
 Name=Apagar
@@ -319,6 +321,7 @@ Automatically installs essential dependencies required for compiling application
 ```
 sudo apt-get install -y build-essential
 ```
+
 ```
 sudo apt-get install -y make automake cmake git subversion checkinstall unzip libtool
 ```
@@ -326,6 +329,7 @@ sudo apt-get install -y make automake cmake git subversion checkinstall unzip li
 ## iDesktop: Lightweight Linux Desktop Management
 
 iDesktop is a tool that enables efficient customization and administration of the desktop environment in Linux systems. It can be obtained from the official website on SourceForge with version 0.7.5 or from the GitHub repository with the latest version 0.7.8.
+
 ```
 https://sourceforge.net/projects/idesk/ (0.7.5)
 https://github.com/neagix/idesk (latest version 0.7.8)
@@ -336,16 +340,21 @@ https://github.com/neagix/idesk (latest version 0.7.8)
 The compilation option obtains the most recent version of iDesktop directly from the official application's source code repository. This process includes both compiling and installing iDesktop. The following steps are undertaken to complete this procedure:
 
 Install necessary dependencies using the following command:
+
 ```
 sudo apt-get install -y libx11-dev libimlib2-dev libxft-dev
 ```
 
 Download the latest version (v0.7.8) from the official GitHub repository with the command:
+
 ```
+cd ~/repos
 wget https://github.com/neagix/idesk/archive/refs/tags/v0.7.8.tar.gz
+tar zxvf v0.7.8.tar.gz
 ```
 
 Execute the following commands to build and install the application:
+
 ```
 autoreconf --install
 ./configure
@@ -354,6 +363,7 @@ sudo make install
 ```
 
 Once completed, iDesktop will be installed in directory: 
+
 ```
 /usr/share/idesk
 ```
@@ -363,11 +373,13 @@ Once completed, iDesktop will be installed in directory:
 The iDesktop desktop manager allows you to create icons and set your desktop wallpaper.
 
 Create a directory for iDesktop configuration (current user pi):
+
 ```
 mkdir ~/.idesktop
 ```
 
 Copy the default iDesktop configuration file to your user directory:
+
 ```
 cp /usr/local/share/idesk/dot.ideskrc ~/.ideskrc
 ```
@@ -377,7 +389,9 @@ cp /usr/local/share/idesk/dot.ideskrc ~/.ideskrc
 Download version 1.4.2 of 'imlib2' the most recent release that includes the 'imlib2-config' utility required for compiling iDesktop.
 
 ```
+cd ~/repos
 wget https://github.com/kkoudev/imlib2/archive/refs/tags/v1.4.2.tar.gz
+tar zxvf v1.4.2.tar.gz
 ```
 
 Perform the following steps for 'imlib2-config' configuration:
@@ -405,7 +419,9 @@ sudo apt-get install -y libncurses5-dev lua5.1 liblua5.1-0-dev libiw-dev libxdam
 
 Download Conky Version 1.9.0 from official source:
 ```
-wget https://sourceforge.net/projects/conky/files/conky/1.9.0/
+cd ~/repos
+wget https://sourceforge.net/projects/conky/files/conky/1.9.0/conky-1.9.0.tar.gz/download
+tar zxvf conky-1.9.0.tar.gz
 ```
 
 Fix the source code in order to compile. Edit the file 'src/conky.c' and 'src/conky.h' to add the following code modifications:
@@ -581,5 +597,112 @@ if [ -f /home/pi/terms/var/autorun.enabled ] ; then
 fi  
 ```
 
+## Remmina / FreeRDP: Compilation Script for Remmina and FreeRDP Tools (latest 2023 stable versions)
 
+Compilation and installation of the Remmina and FreeRDP tools in their stable versions on a Raspberry Debian Linux system. To achieve this, the script performs the following actions:
+
+```
+sudo mkdir /opt/remmina
+```
+
+### FreeRDP
+
+```
+sudo apt-get install -y libssl-dev
+sudo apt-get install -y libavcodec-dev
+sudo apt-get install -y libavutil-dev
+sudo apt-get install -y libswresample-dev
+sudo apt-get install -y libpkcs11-helper1-dev
+sudo apt-get install -y libkrb5-dev
+sudo apt-get install -y heimdal-dev
+sudo apt-get install -y libicu-dev
+sudo apt-get install -y libswscale-dev
+sudo apt-get install -y libpulse-dev
+sudo apt-get install -y libcups2-dev
+sudo apt-get install -y libfuse3-dev
+sudo apt-get install -y docbook-xsl
+sudo apt-get install -y xsltproc
+sudo apt-get install -y libusb-1.0-0-dev
+```
+
+```
+mkdir ~/repos/freerdp_build
+cd ~/repos/freerdp_build
+wget https://github.com/FreeRDP/FreeRDP/files/12670558/freerdp-2.11.2.tar.gz
+tar zxvf freerdp-2.11.2.tar.gz
+```
+
+```
+cd ~/repos/freerdp_build
+sudo rm -rf freerdp/CMakeCache.txt freerdp/CMakeFiles
+```
+
+```
+cmake -DCMAKE_BUILD_TYPE=Release -DTARGET_ARCH=ARM64 -DARM_FP_ABI=hard -DWITH_CUPS=ON -DWITH_PULSE=ON -DWITH_NEON=OFF -DWITH_WAYLAND=OFF -DCMAKE_INSTALL_PREFIX:PATH=/opt/remmina/freerdp freerdp
+```
+
+```
+make -j
+sudo make install
+```
+
+```
+sudo ln -s /opt/remmina/freerdp/bin/xfreerdp /usr/local/bin/
+echo /opt/remmina/freerdp/lib | sudo tee /etc/ld.so.conf.d/freerdp_devel.conf > /dev/null
+sudo ldconfig
+```
+
+
+### Remmina
+
+```
+sudo apt-get install -y libatk1.0-dev
+sudo apt-get install -y libgdk-pixbuf2.0-dev
+sudo apt-get install -y libpango1.0-dev
+sudo apt-get install -y libgtk-3-dev
+sudo apt-get install -y libharfbuzz-dev
+sudo apt-get install -y libgcrypt20-dev
+sudo apt-get install -y libsodium-dev
+sudo apt-get install -y libssh-dev
+sudo apt-get install -y libvte-2.91-dev
+sudo apt-get install -y libjson-glib-dev
+sudo apt-get install -y libkf5wallet-dev
+sudo apt-get install -y python3-dev
+sudo apt-get install -y libsecret-1-dev
+sudo apt-get install -y gettext
+sudo apt-get install -y libavahi-client-dev
+```
+
+```
+mkdir ~/repos/remmina_build
+cd ~/repos/remmina_build
+wget https://gitlab.com/Remmina/Remmina/-/archive/v.1.4.33/Remmina-v.1.4.33.tar.gz
+tar zxvf Remmina-v.1.4.33.tar.gz
+```
+
+```
+cd ~/repos/remmina_build
+sudo rm -rf remmina/CMakeCache.txt remmina/CMakeFiles
+```
+
+```
+cmake -DCMAKE_BUILD_TYPE=Release -DHAVE_LIBAPPINDICATOR=OFF -DWITH_PYTHONLIBS=ON -DWITH_X2GO=OFF -DWITH_FREERDP3=OFF -DWITH_WEBKIT2GTK=OFF -DWITH_KF5WALLET=ON -DWITH_NEWS=OFF -DWITH_GVNC=OFF -DWITH_LIBVNCSERVER=OFF -DWITH_SPICE=OFF -DCMAKE_INSTALL_PREFIX:PATH=/opt/remmina/remmina -DCMAKE_PREFIX_PATH=/opt/remmina/freerdp remmina
+```
+
+```
+make -j
+sudo make install
+```
+
+```
+sudo ln -s /opt/remmina/remmina/bin/remmina /usr/local/bin/
+```
+
+### Remmina: Minimalist control buttons for thinclient optimizations (remove toolbar buttons)
+
+To optimize Remmina's thin client mode, simplify the toolbar by removing non-essential features. Keep only 'minimize' and 'log out' options. This requires commenting out code in the 'rcw.c' file to disable remote connection toolbar buttons, followed by recompilation.
+
+```
+rcw.c -> /* Duplicate session */
+```
 - 
