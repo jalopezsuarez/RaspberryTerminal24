@@ -585,14 +585,16 @@ end
 This guide assists in compiling and configuring Conky, a system monitor tool.
 
 Intall required dependencies:
+
 ```
-sudo apt-get install -y libncurses5-dev lua5.1 liblua5.1-0-dev libiw-dev libxdamage-dev
+sudo apt-get install -y libncurses5-dev lua5.1 liblua5.1-0-dev libiw-dev libxdamage-dev libasound2-dev docbook2x xsltproc
 ```
 
 Download Conky Version 1.9.0 from official source:
+
 ```
 cd ~/terms/repos
-wget https://sourceforge.net/projects/conky/files/conky/1.9.0/conky-1.9.0.tar.gz/download
+wget https://sourceforge.net/projects/conky/files/conky/1.9.0/conky-1.9.0.tar.gz
 tar zxvf conky-1.9.0.tar.gz
 ```
 
@@ -716,16 +718,58 @@ Disable specific key combinations, and introduce efficient keyboard shortcuts:
       </action>
     </keybind>
     <keybind key="C-Right">
-      <action name="NextWindow"/>
+      <action name="NextWindow">
+        <finalactions>
+          <action name="Focus"/>
+          <action name="Raise"/>
+          <action name="Unshade"/>
+        </finalactions>
+      </action>
     </keybind>
     <keybind key="C-Up">
-      <action name="NextWindow"/>
+      <action name="NextWindow">
+        <finalactions>
+          <action name="Focus"/>
+          <action name="Raise"/>
+          <action name="Unshade"/>
+        </finalactions>
+      </action>
     </keybind>
     <keybind key="C-Left">
-      <action name="PreviousWindow"/>
+      <action name="PreviousWindow">
+        <finalactions>
+          <action name="Focus"/>
+          <action name="Raise"/>
+          <action name="Unshade"/>
+        </finalactions>
+      </action>
     </keybind>
     <keybind key="C-Down">
-      <action name="PreviousWindow"/>
+      <action name="PreviousWindow">
+        <finalactions>
+          <action name="Focus"/>
+          <action name="Raise"/>
+          <action name="Unshade"/>
+        </finalactions>
+      </action>
+    </keybind>
+    <keybind key="A-Tab">
+      <action name="NextWindow">
+        <finalactions>
+          <action name="Focus"/>
+          <action name="Raise"/>
+          <action name="Unshade"/>
+        </finalactions>
+      </action>
+    </keybind>
+    <keybind key="A-S-Tab">
+      <action name="PreviousWindow">
+        <finalactions>
+          <action name="Focus"/>
+          <action name="Raise"/>
+          <action name="Unshade"/>
+        </finalactions>
+      </action>
     </keybind>
   </keyboard>
 ```
@@ -741,6 +785,11 @@ Minimize user interaction while maintaining control:
 ### Openbox Automatic Startup Configuration
 
 Set up Openbox for automatic execution of scripts and programs that prepare your graphical environment before initialization, automating essential tasks, from launching a VNC server to customizing your desktop environment.
+
+```
+vi ~/.config/openbox/autostart.sh
+chmod +x ~/.config/openbox/autostart.sh
+```
 
 ```
 # Openbox autostart.sh
