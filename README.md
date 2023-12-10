@@ -471,7 +471,7 @@ The compilation option obtains the most recent version of iDesktop directly from
 Install necessary dependencies using the following command:
 
 ```
-sudo apt-get install -y libx11-dev libimlib2-dev libxft-dev
+sudo apt-get install -y libx11-dev libxext-dev libice-dev libxft-dev libimlib2-dev
 ```
 
 Download the latest version (v0.7.8) from the official GitHub repository with the command:
@@ -485,7 +485,6 @@ tar zxvf v0.7.8.tar.gz
 Execute the following commands to build and install the application:
 
 ```
-autoreconf --install
 ./configure
 make -j
 sudo make install
@@ -495,22 +494,6 @@ Once completed, iDesktop will be installed in directory:
 
 ```
 /usr/share/idesk
-```
-
-### iDesktop Configuration
-
-The iDesktop desktop manager allows you to create icons and set your desktop wallpaper.
-
-Create a directory for iDesktop configuration (current user pi):
-
-```
-mkdir ~/.idesktop
-```
-
-Copy the default iDesktop configuration file to your user directory:
-
-```
-cp /usr/local/share/idesk/dot.ideskrc ~/.ideskrc
 ```
 
 ### imlib2: Problems with default Debian imbli2 library (missing imglib2-config)
@@ -535,6 +518,66 @@ sudo ln -s /usr/include/freetype2/freetype /usr/include/freetype
 make -j
 sudo make install
 sudo cp imlib2-config /usr/bin
+```
+
+### iDesktop Configuration
+
+The iDesktop desktop manager allows you to create icons and set your desktop wallpaper.
+
+Create a directory for iDesktop configuration (current user pi):
+
+```
+mkdir ~/.idesktop
+```
+
+iDesktop configuration file in user directory:
+
+```
+vi  ~/.ideskrc
+```
+
+```
+table Config
+  FontName: gothic
+  FontSize: 11
+  FontColor: #FFFFFF
+  ToolTip.FontSize: 11
+  ToolTip.FontName: gothic
+  ToolTip.ForeColor: #333333
+  ToolTip.BackColor: #FFFFFF
+  ToolTip.CaptionOnHover: true
+  ToolTip.CaptionPlacement: Right
+  Locked: true
+  Transparency: 0
+  Shadow: true
+  ShadowColor: #000000
+  ShadowX: 1
+  ShadowY: 1 
+  Bold: true
+  ClickDelay: 300
+  IconSnap: true
+  SnapWidth: 24
+  SnapHeight: 24
+  SnapOrigin: TopLeft
+  SnapShadow: false
+  SnapShadowTrans: 200
+  CaptionOnHover: false
+  CaptionPlacement: bottom
+  FillStyle: fillinvert
+  Background.Delay: 0
+  Background.Source: None
+  Background.File: /home/pi/terms/share/idesk/background.jpg
+  Background.Mode: Scale
+  Background.Color: #C2CCFF
+end
+table Actions
+  Lock: control right doubleClk
+  Reload: middle doubleClk
+  Drag: left hold
+  EndDrag: left singleClk
+  Execute[0]: left doubleClk
+  Execute[1]: right doubleClk
+end
 ```
 
 ## Conky Version 1.9.0 Compilation and Configuration
