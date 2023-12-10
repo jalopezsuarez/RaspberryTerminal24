@@ -878,6 +878,9 @@ sudo apt-get install -y libfuse3-dev
 sudo apt-get install -y docbook-xsl
 sudo apt-get install -y xsltproc
 sudo apt-get install -y libusb-1.0-0-dev
+sudo apt-get install -y ffmpeg
+sudo apt-get install -y libx11-xkbfile-dev
+sudo apt-get install -y libxv-dev
 ```
 
 ```
@@ -894,7 +897,7 @@ sudo rm -rf freerdp/CMakeCache.txt freerdp/CMakeFiles
 ```
 
 ```
-cmake -DCMAKE_BUILD_TYPE=Release -DTARGET_ARCH=ARM64 -DARM_FP_ABI=hard -DWITH_CUPS=ON -DWITH_PULSE=ON -DWITH_NEON=OFF -DWITH_WAYLAND=OFF -DCMAKE_INSTALL_PREFIX:PATH=/opt/remmina/freerdp freerdp
+cmake -DCMAKE_BUILD_TYPE=Release -DTARGET_ARCH=ARM64 -DWITH_CUPS=ON -DWITH_PULSE=ON -DWITH_NEON=OFF -DWITH_WAYLAND=OFF -DWITH_LIBSYSTEMD=OFF -DWITH_XINERAMA=OFF -DWITH_XCURSOR=OFF -DWITH_XRANDR=OFF -DCMAKE_INSTALL_PREFIX:PATH=/opt/remmina/freerdp freerdp
 ```
 
 ```
