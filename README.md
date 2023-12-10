@@ -142,7 +142,14 @@ sudo apt-get install -y build-essential
 ```
 
 ```
-sudo apt-get install -y make automake cmake git subversion checkinstall unzip libtool
+sudo apt-get install -y make
+sudo apt-get install -y automake
+sudo apt-get install -y cmake
+sudo apt-get install -y git
+sudo apt-get install -y subversion
+sudo apt-get install -y checkinstall
+sudo apt-get install -y unzip
+sudo apt-get install -y libtool
 ```
 
 ### System: Purge and Update System References Repository
@@ -151,7 +158,7 @@ Update the software repository using the following command which update library 
 
 ```
 sudo apt-get update
-sudo apt-get -y autoremove --purge
+sudo apt-get autoremove -y --purge
 sudo apt-get autoclean
 sudo apt-get autoremove
 sudo apt-get clean
@@ -245,7 +252,8 @@ For VNC server functionality, we recommend using x11vnc.
 Install necessary fonts and VNC server:
 
 ```
-sudo apt-get install -y xfonts-75dpi xfonts-100dpi
+sudo apt-get install -y xfonts-75dpi
+sudo apt-get install -y xfonts-100dpi
 ```
 
 ```
@@ -469,7 +477,11 @@ https://packages.debian.org/source/bookworm/mips64el/idesk
 Install necessary dependencies using the following command:
 
 ```
-sudo apt-get install -y libx11-dev libxext-dev libice-dev libxft-dev libimlib2-dev
+sudo apt-get install -y libx11-dev
+sudo apt-get install -y libxext-dev
+sudo apt-get install -y libice-dev
+sudo apt-get install -y libxft-dev
+sudo apt-get install -y libimlib2-dev
 ```
 
 Download sources from the official Debian repository with the command:
@@ -574,7 +586,14 @@ This guide assists in compiling and configuring Conky, a system monitor tool.
 Intall required dependencies:
 
 ```
-sudo apt-get install -y libncurses5-dev lua5.1 liblua5.1-0-dev libiw-dev libxdamage-dev libasound2-dev docbook2x xsltproc
+sudo apt-get install -y libncurses5-dev
+sudo apt-get install -y lua5.1
+sudo apt-get install -y liblua5.1-0-dev
+sudo apt-get install -y libiw-dev
+sudo apt-get install -y libxdamage-dev
+sudo apt-get install -y libasound2-dev
+sudo apt-get install -y docbook2x
+sudo apt-get install -y xsltproc
 ```
 
 Download Conky 1.9.0 from official source:
@@ -789,7 +808,8 @@ fi
 Setting up a specific version of Java 8 Development Envronment and Maven 3 Dependency Management optimized for embedded thin client systems on Barebone Raspberry Pi Systems.
 
 ```
-sudo apt install -y libx11-dev libxtst-dev
+sudo apt install -y libx11-dev
+sudo apt install -y libxtst-dev
 ```
 
 ### Java Development Enviroment
