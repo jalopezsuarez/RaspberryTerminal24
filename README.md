@@ -155,8 +155,9 @@ Setting up a specific version of Java 8 Development Envronment and Maven 3 Depen
 ```
 sudo mkdir /usr/lib/jvm
 sudo cp ~/terms/repos/jdk-8u201-linux-arm64-vfp-hflt.tar.gz /usr/lib/jvm
-tar zxvf jdk-8u201-linux-arm32-vfp-hflt.tar.gz
-mv [EXTRACTED] jdk8
+cd /usr/lib/jvm
+sudo tar zxvf jdk-8u201-linux-arm64-vfp-hflt.tar.gz
+sudo mv [EXTRACTED] jdk8
 ```
 
 ### Maven Java Dependency Management
@@ -164,7 +165,8 @@ mv [EXTRACTED] jdk8
 ```
 sudo mkdir /usr/lib/mvn
 sudo cp ~/terms/repos/apache-maven-3.3.9-bin.tar.gz /usr/lib/mvn
-tar zxvf apache-maven-3.3.9-bin.tar.gz
+cd /usr/lib/mvn
+sudo tar zxvf apache-maven-3.3.9-bin.tar.gz
 mv [EXTRACTED] maven3
 ```
 
@@ -181,6 +183,12 @@ sudo vi /etc/profile
 export JAVA_HOME=/usr/lib/jvm/jdk8
 export M2_HOME=/usr/lib/mvn/maven3
 export PATH=$PATH:$JAVA_HOME/bin:$M2_HOME/bin
+```
+
+Ensure that the changes take effect immediately, you can either log out and log back in or reboot your system
+
+```
+sudo reboot
 ```
 
 ## X-Window: Installing a Minimal X-Window System
