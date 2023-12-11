@@ -1122,3 +1122,8 @@ sudo apt-get install -y x11-utils
 sudo apt-get install -y chromium
 ```
 
+A very interesting mode is the fullscreen kiosk mode that can be integrated into single-user (Remmina) for automatic startup of web apps.
+
+```
+chromium --kiosk https://www.webpage.com
+```
