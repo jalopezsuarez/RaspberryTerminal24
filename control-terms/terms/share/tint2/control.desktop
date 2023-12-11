@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Panel de Control
+Comment=Panel de Control
+Exec=/home/pi/terms/bin/control.sh
+Icon=/home/pi/terms/share/tint2/control.png
+Type=Application

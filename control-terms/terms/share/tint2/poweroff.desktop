@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Apagar
+Comment=Apagar
+Exec=/home/pi/terms/bin/poweroff.sh
+Icon=/home/pi/terms/share/tint2/poweroff.png
+Type=Application
