@@ -692,7 +692,7 @@ uppercase no
 extra_newline no
 
 TEXT 
-${nodename}  ${uptime}  ${execi 30 cat /sys/class/thermal/thermal_zone0/temp | awk '{print substr($0,0,2)}'}C${if_existing /sys/class/net/ppp0/operstate}  VPN${endif}${if_existing /sys/class/net/eth0/operstate up}  Ethernet ${addr eth0}${endif}${if_existing /sys/class/net/wlan0/operstate up}  Wi-Fi ${addr wlan0} ${wireless_essid wlan0} ${wireless_link_qual_perc wlan0}%${endif}  ${if_existing /sys/class/net/eth0/operstate up}eth0 ${downspeed eth0}(${totaldown eth0} descarga) / ${upspeed eth0}(${totalup eth0} subida) ${endif}${if_existing /sys/class/net/wlan0/operstate up}wlan0 ${downspeed wlan0}(${totaldown wlan0} descarga) / ${upspeed wlan0}(${totalup wlan0} subida) ${endif}
+${nodename}  ${uptime}  CPU ${if_match ${cpu cpu0}<10}0${endif}${cpu cpu0}% ${execi 30 cat /sys/class/thermal/thermal_zone0/temp | awk '{print substr($0,0,2)}'}C  Mem ${execi 10 free --si -m|awk '/^Mem/{printf "%.2f",$3/1024}'}/$memmax ${execi 10 free --si -m|awk '/^Mem/{printf "%.1f%%", 100*$3/$2}'}${if_existing /sys/class/net/eth0/operstate up}  Ethernet ${addr eth0}${endif}${if_existing /sys/class/net/wlan0/operstate up}  Wi-Fi ${addr wlan0} ${wireless_essid wlan0} ${wireless_link_qual_perc wlan0}%${endif}  ${if_existing /sys/class/net/eth0/operstate up}eth0 ${downspeed eth0}(${totaldown eth0} descarga) / ${upspeed eth0}(${totalup eth0} subida) ${endif}${if_existing /sys/class/net/wlan0/operstate up}wlan0 ${downspeed wlan0}(${totaldown wlan0} descarga) / ${upspeed wlan0}(${totalup wlan0} subida) ${endif}
 ```
 
 ## Openbox Configuration and Optimizations
