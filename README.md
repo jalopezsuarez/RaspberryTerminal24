@@ -1133,13 +1133,14 @@ chromium --kiosk https://www.webpage.com
 Compress multipart file in 40MB:
 
 ```
-zip jdk-8u271-linux-aarch64.zip jdk-8u271-linux-aarch64.tar.gz
-zip -s 41943040 jdk-8u271-linux-aarch64.zip --out jdk-8u271-linux-aarch64-parts.zip
+zip sample.zip sample.tar.gz
+zip -s 41943040 sample.zip --out sample-parts.zip
 ```
 
 Uncompress multipart file from parts:
 
 ```
-zip -s- jdk-8u271-linux-aarch64-parts.zip -O jdk-8u271-linux-aarch64-ok.zip
-unzip jdk-8u271-linux-aarch64-ok.zip
+zip -s- sample-parts.zip -O sample-ok.zip
+unzip sample-ok.zip
 ```
+
