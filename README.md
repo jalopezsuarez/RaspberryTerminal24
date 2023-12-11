@@ -1127,3 +1127,19 @@ A very interesting mode is the fullscreen kiosk mode that can be integrated into
 ```
 chromium --kiosk https://www.webpage.com
 ```
+
+### ZIP / UNZIP Compress Multipart (sample)
+
+Compress multipart file in 40MB:
+
+```
+zip jdk-8u271-linux-aarch64.zip jdk-8u271-linux-aarch64.tar.gz
+zip -s 41943040 jdk-8u271-linux-aarch64.zip --out jdk-8u271-linux-aarch64-parts.zip
+```
+
+Uncompress multipart file from parts:
+
+```
+zip -s- jdk-8u271-linux-aarch64-parts.zip -O jdk-8u271-linux-aarch64-ok.zip
+unzip jdk-8u271-linux-aarch64-ok.zip
+```
