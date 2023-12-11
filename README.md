@@ -146,7 +146,6 @@ sudo apt-get install -y make
 sudo apt-get install -y automake
 sudo apt-get install -y cmake
 sudo apt-get install -y git
-sudo apt-get install -y subversion
 sudo apt-get install -y checkinstall
 sudo apt-get install -y unzip
 sudo apt-get install -y libtool
@@ -1062,27 +1061,7 @@ disable_splash=1
 avoid_warnings=1
 ```
 
-## Supplementary Software Packages
-
-Installation of supplementary software packages:
-
-### wpa_gui - WPA Graphical User Interface
-
-Graphical User Interface (GUI) tool designed for configuring Wi-Fi networks on the Debian Linux system. It is built upon the QT libraries from the KDE environment and serves as a graphical frontend for interacting with wpa_supplicant. This tool enables users to query the current network status, modify configuration settings, and request interactive user input when needed.
-
-```
-sudo apt-get install -y wpagui
-```
-
-### Geany
-
-Geany is a powerful, stable and lightweight programmer's text editor that provides tons of useful features without bogging down your workflow and has built-in support for programming languages.
-
-```
-sudo apt-get install -y geany
-```
-
-## System Network Manual Configuration (Raspberry Debian Linux)
+## System Network Configuration (Raspberry Debian Linux)
 
 text
 
@@ -1106,26 +1085,40 @@ text
 code
 ```
 
-## Extra System Tools
+### wpa_gui - WPA Graphical User Interface
 
-text
-
-```
-code
-```
-
-### Extra Tools: Python2 / Python3
-
-text
+Graphical User Interface (GUI) tool designed for configuring Wi-Fi networks on the Debian Linux system. It is built upon the QT libraries from the KDE environment and serves as a graphical frontend for interacting with wpa_supplicant. This tool enables users to query the current network status, modify configuration settings, and request interactive user input when needed.
 
 ```
-code
+sudo apt-get install -y wpagui
 ```
 
-### Extra Tools: WiringPi
+## Supplementary Software Packages
 
-text
+Here are a set of additional tools that are useful for the management and use of the thin client system.
+
+### Python3
+
+Python, the high-level, interactive object oriented language, includes an extensive class library with lots of goodies for network programming, system administration, sounds and graphics.
 
 ```
-code
+sudo apt-get install -y python3 python3-dev python3-pip
 ```
+
+### Geany
+
+Geany is a powerful, stable and lightweight programmer's text editor that provides tons of useful features without bogging down your workflow and has built-in support for programming languages.
+
+```
+sudo apt-get install -y geany
+```
+
+### Chromium Web Browser
+
+Chromium is an open source web browser that strives for a secure, fast and stable web browsing experience for its users. It is the open source project behind Google Chrome.
+
+```
+sudo apt-get install -y x11-utils
+sudo apt-get install -y chromium
+```
+
