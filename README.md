@@ -642,7 +642,7 @@ vi ~/.conkyrc
 ```
 
 ```
-background yes
+background false
 alignment top_left
 
 out_to_console no
