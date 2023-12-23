@@ -62,57 +62,6 @@ echo "set nocompatible" > ~/.vimrc
 echo "set backspace=indent,eol,start" >> ~/.vimrc
 ```
 
-### Setting System Language and Keyboard Layout
-
-Raspberry Debian Linux Thinclient system should now be using SPANISH (es_ES.UTF-8) as the default system language and have the correct time zone set to Europe/Madrid.
-
-In the configuration dialog, scroll down and find es_ES.UTF-8 in the list. Use the arrow keys to select it and press the spacebar to mark it with an asterisk (*). Press "Tab" to highlight the "OK" button, and then press "Enter" to confirm your selection:
-
-```
-sudo dpkg-reconfigure locales
-```
-
-Navigate through the menu to find EUROPE and then select MADRID. This will set your time zone to Europe/Madrid:
-
-```
-sudo dpkg-reconfigure tzdata
-```
-
-Set system default language and character encoding permanent in operatin system environment:
-
-```
-sudo vi /etc/bash.bashrc
-```
-
-```
-# System Default Language 
-export LANGUAGE="es_ES.UTF-8"
-export LC_ALL="es_ES.UTF-8"
-export LC_CTYPE="es_ES.UTF-8"
-export LC_LANG="es_ES.UTF-8"
-export LANG="es_ES.UTF-8"
-```
-
-Set keyboard layout to SPANISH with Debian command-line utility:
-
-```
-sudo dpkg-reconfigure keyboard-configuration
-```
-
-```
-Generic 105-key (Intl) PC ->
-Spanish ->
-The default for the keyboard layout ->
-No compose key ->
-Control+Alt+Backspace to terminate the X server? NO
-```
-
-Ensure that the changes take effect immediately, you can either log out and log back in or reboot your system
-
-```
-sudo reboot
-```
-
 ### Network: Customizing the Hostname for Network Identification
 
 To improve network identification, change the default hostname 'raspberrypi' to 'terminal' using the following commands. Replace 'raspberrypi' with 'terminal' and save the file:
@@ -164,22 +113,6 @@ sudo apt-get clean
 sudo ldconfig
 ```
 
-## Terminal Thinclient Resources and Assets
-
-Para comenzar hay que disponer de la estructura de directorios y recursos necesarios para poner en marcha el sistema thinclient. Descomprimir el archivo control-terms.tgz que contiene toda la estrucutra y ficheros necesarios para el sistema:
-
-```
-cd
-tar zxvf control-terms.tgz
-```
-
-```
-~/terms/bin [APLICACIONES EJECUTABLES]
-~/terms/repos [DESCARGAS ORIGINALES]
-~/terms/share [RECURSOS COMPARTIDOS]
-~/terms/var [CONTROL DE ESTADO]
-```
-
 ## X-Window: Installing a Minimal X-Window System
 
 To set up a minimal X-Window system, use the following command. This command will install the necessary components for a minimal X-Window environment without additional recommended packages.
@@ -216,6 +149,57 @@ XTerm*renderFont: true
 
 These adjustments will help you customize and improve your XTerminal experience.
 
+### Setting System Language and Keyboard Layout
+
+Raspberry Debian Linux Thinclient system should now be using SPANISH (es_ES.UTF-8) as the default system language and have the correct time zone set to Europe/Madrid.
+
+In the configuration dialog, scroll down and find es_ES.UTF-8 in the list. Use the arrow keys to select it and press the spacebar to mark it with an asterisk (*). Press "Tab" to highlight the "OK" button, and then press "Enter" to confirm your selection:
+
+```
+sudo dpkg-reconfigure locales
+```
+
+Navigate through the menu to find EUROPE and then select MADRID. This will set your time zone to Europe/Madrid:
+
+```
+sudo dpkg-reconfigure tzdata
+```
+
+Set system default language and character encoding permanent in operatin system environment:
+
+```
+sudo vi /etc/bash.bashrc
+```
+
+```
+# System Default Language 
+export LANGUAGE="es_ES.UTF-8"
+export LC_ALL="es_ES.UTF-8"
+export LC_CTYPE="es_ES.UTF-8"
+export LC_LANG="es_ES.UTF-8"
+export LANG="es_ES.UTF-8"
+```
+
+Set keyboard layout to SPANISH with Debian command-line utility:
+
+```
+sudo dpkg-reconfigure keyboard-configuration
+```
+
+```
+Generic 105-key (Intl) PC ->
+Spanish ->
+The default for the keyboard layout ->
+No compose key ->
+Control+Alt+Backspace to terminate the X server? NO
+```
+
+Ensure that the changes take effect immediately, you can either log out and log back in or reboot your system
+
+```
+sudo reboot
+```
+
 ### X-Window Thinclient: Disabling Terminal/Console Switching in X-Windows
 
 Disabling terminal/console switching in Windows is preferable for the user experience of a thin client system. It prevents users from accessing unnecessary features, simplifying the user experience to the essentials.
@@ -232,6 +216,22 @@ Add the following lines inside the file:
 Section "ServerFlags"
     Option "DontVTSwitch" "true"
 EndSection
+```
+
+## Terminal Thinclient Resources and Assets
+
+Para comenzar hay que disponer de la estructura de directorios y recursos necesarios para poner en marcha el sistema thinclient. Descomprimir el archivo control-terms.tgz que contiene toda la estrucutra y ficheros necesarios para el sistema:
+
+```
+git clone https://github.com/jalopezsuarez/RaspberryTerminal24.git
+mv RaspberryTerminal24/control-terms/terms ~
+```
+
+```
+~/terms/bin [APLICACIONES EJECUTABLES]
+~/terms/repos [DESCARGAS ORIGINALES]
+~/terms/share [RECURSOS COMPARTIDOS]
+~/terms/var [CONTROL DE ESTADO]
 ```
 
 ### Openbox: Configuring Openbox Window Manager for Raspberry Pi
