@@ -218,22 +218,6 @@ Section "ServerFlags"
 EndSection
 ```
 
-## Terminal Thinclient Resources and Assets
-
-Para comenzar hay que disponer de la estructura de directorios y recursos necesarios para poner en marcha el sistema thinclient. Descomprimir el archivo control-terms.tgz que contiene toda la estrucutra y ficheros necesarios para el sistema:
-
-```
-git clone https://github.com/jalopezsuarez/RaspberryTerminal24.git
-mv RaspberryTerminal24/control-terms/terms ~
-```
-
-```
-~/terms/bin [APLICACIONES EJECUTABLES]
-~/terms/repos [DESCARGAS ORIGINALES]
-~/terms/share [RECURSOS COMPARTIDOS]
-~/terms/var [CONTROL DE ESTADO]
-```
-
 ### Openbox: Configuring Openbox Window Manager for Raspberry Pi
 
 The Openbox window manager for XWindow is a minimalist option that consumes only 7MB of memory, making it ideal for low-capacity devices like Raspberry Pi. After installing Openbox, you can apply the 'win10mod.obt' theme to give your windows a Windows 10-style appearance.
@@ -265,21 +249,23 @@ Create a password for your VNC access credentials:
 x11vnc -storepasswd
 ```
 
-### Raspberry 5 FIX 
+### X-Window Raspberry 5 FixError
 
-In Raspberry 5, if you're trying to build up an X11 GUI-ful on Bookworm Lite, you may have already discovered that it doesn't work, while the exact same disk popped into a Pi4 works as it always has, and the GUI comes up.
+In Raspberry 5, if you're trying to build up an X11 GUI-ful on Bookworm Lite, you may have already discovered that it doesn't work, while the exact same disk popped into a Pi4 works as it always has, and the GUI comes up. 
+
+The error in Xorg.0.log is: 
 
 ```
-The error in /var/log/Xorg.0.log is: Cannot run in framebuffer mode. Please specify busIDs
+Cannot run in framebuffer mode. Please specify busIDs.
 ```
 
 ```
 sudo apt-get install gldriver-test
 ```
 
-### System X-Window X11
+### Raspberry Desktop Window System (X11)
 
-Nos vamos a la utilidad de raspi-config y establecemos las opciones de arranque automático
+Nos vamos a la utilidad de raspi-config y establecemos las opciones de X11 como systema de ventanas por defecto.
 
 ```
 sudo raspi-config 
@@ -318,6 +304,22 @@ This will set your blanking timeout to 0 seconds and turn off your display power
 
 ```
 starts & x11vnc -usepw -repeat -shared -forever &
+```
+
+## Terminal Thinclient Resources and Assets
+
+Para comenzar hay que disponer de la estructura de directorios y recursos necesarios para poner en marcha el sistema thinclient. Descomprimir el archivo control-terms.tgz que contiene toda la estrucutra y ficheros necesarios para el sistema:
+
+```
+git clone https://github.com/jalopezsuarez/RaspberryTerminal24.git
+mv RaspberryTerminal24/control-terms/terms ~
+```
+
+```
+~/terms/bin [APLICACIONES EJECUTABLES]
+~/terms/repos [DESCARGAS ORIGINALES]
+~/terms/share [RECURSOS COMPARTIDOS]
+~/terms/var [CONTROL DE ESTADO]
 ```
 
 ## Tint2: Enhancing Task Management with Tint2
