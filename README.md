@@ -1055,6 +1055,8 @@ sudo vi /boot/cmdline.txt
 
 Add following commands after rootwait:
 
+AGREGAR COPIA ENTERA!!
+
 ```
 loglevel=0 vt.global_cursor_default=0 logo.nologo quiet splash plymouth.enable=1 plymouth.ignore-serial-consoles
 ```
