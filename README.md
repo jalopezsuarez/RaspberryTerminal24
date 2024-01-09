@@ -265,11 +265,25 @@ Create a password for your VNC access credentials:
 x11vnc -storepasswd
 ```
 
-Start x11vnc with password authentication, repeat, sharing, and continuous operation:
+### Raspberry 5 FIX 
+
+In Raspberry 5, if you're trying to build up an X11 GUI-ful on Bookworm Lite, you may have already discovered that it doesn't work, while the exact same disk popped into a Pi4 works as it always has, and the GUI comes up.
 
 ```
-starts &
-x11vnc -usepw -repeat -shared -forever &
+The error in /var/log/Xorg.0.log is: Cannot run in framebuffer mode. Please specify busIDs
+```
+
+```
+sudo apt-get install gldriver-test
+```
+
+### System X-Window X11
+
+Nos vamos a la utilidad de raspi-config y establecemos las opciones de arranque automático
+
+```
+sudo raspi-config 
+Raspi-Config :: 9 Advanced Options :: A6 Wayland to X11
 ```
 
 ### System Autologin
@@ -299,6 +313,12 @@ xserver-command=X -s 0 -dpms
 ```
 
 This will set your blanking timeout to 0 seconds and turn off your display power management singling. Se puede modificar el tiempo de 0 a n segundos para configurarlo.
+
+### [EXTRA] Start X-Window with x11vnc with password authentication, repeat, sharing, and continuous operation:
+
+```
+starts & x11vnc -usepw -repeat -shared -forever &
+```
 
 ## Tint2: Enhancing Task Management with Tint2
 
