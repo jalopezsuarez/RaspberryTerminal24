@@ -294,7 +294,7 @@ sudo vi /etc/lightdm/lightdm.conf
 ```
 
 ```
-[SeatDefaults]
+[Seat:*]
 xserver-command=X -s 0 -dpms
 ```
 
