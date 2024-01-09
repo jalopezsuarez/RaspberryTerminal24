@@ -984,7 +984,7 @@ sudo ln -s /opt/remmina/remmina/bin/remmina /usr/local/bin/
 To optimize Remmina's thin client mode, simplify the toolbar by removing non-essential features. Keep only 'minimize' and 'log out' options. This requires commenting out code in the 'rcw.c' file to disable remote connection toolbar buttons, followed by recompilation.
 
 ```
-rcw.c -> /* Duplicate session */
+./remmina/src/rcw.c -> /* Duplicate session */
 ```
 
 ### Remmina Extra Pro Tips
