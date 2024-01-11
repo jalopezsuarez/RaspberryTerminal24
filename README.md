@@ -1192,7 +1192,7 @@ sudo apt-get install -y wpagui
 Gestionar las conexiones de red utilizando el archivo `dhcpcd.conf` editandolo con el editor de textos:
 
 ```
-sudo vi /etc/dhcp/dhcpcd.conf
+sudo vi /etc/dhcpcd.conf
 ```
 
 ```
