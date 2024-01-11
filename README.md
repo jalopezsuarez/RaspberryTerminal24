@@ -1034,7 +1034,7 @@ sudo systemctl start monopuesto.service
 
 ### Autorun Service
 
-Sistemas de autoarranque de aplicacion java de escritorio y modo root.
+Sistemas de autoarranque de aplicacion java por defecto en `app/app.jar` de escritorio y modo root.
 
 ```
 sudo vi /etc/systemd/system/autorun.service
@@ -1179,34 +1179,59 @@ avoid_warnings=1
 
 ## System Network Configuration (Raspberry Debian Linux)
 
-text
-
-```
-code
-```
-
-### Manual Network Setup (network interfaces)
-
-text
-
-```
-code
-```
-
-### Manual Wi-Fi Setup (wpa_supplicant)
-
-text
-
-```
-code
-```
-
 ### wpa_gui - WPA Graphical User Interface
 
 Graphical User Interface (GUI) tool designed for configuring Wi-Fi networks on the Debian Linux system. It is built upon the QT libraries from the KDE environment and serves as a graphical frontend for interacting with wpa_supplicant. This tool enables users to query the current network status, modify configuration settings, and request interactive user input when needed.
 
 ```
 sudo apt-get install -y wpagui
+```
+
+### Manual Network Setup (network interfaces)
+
+Gestionar las conexiones de red utilizando el archivo `dhcpcd.conf` editandolo con el editor de textos:
+
+```
+sudo vi /etc/dhcpcd.conf
+```
+
+```
+# ########################################################
+# Ethernet interface
+
+#interface eth0
+#static ip_address=192.168.0.128/24
+#static routers=192.168.0.1
+#static domain_name_servers=8.8.8.8 8.8.4.4
+
+# ########################################################
+# Wi-Fi interface
+
+interface wlan0
+static ip_address=192.168.0.128/24
+static routers=192.168.0.1
+static domain_name_servers=8.8.8.8 8.8.4.4
+
+# #######################################################
+# Network Defaults
+
+auto lo
+iface lo inet loopback
+```
+
+### Manual Wi-Fi Setup (wpa_supplicant)
+
+Open the `wpa-supplicant` configuration file in text editor:
+
+```
+sudo vi /etc/wpa_supplicant/wpa_supplicant.conf
+```
+
+```
+network={
+    ssid="The_ESSID_from_earlier"
+    psk="Your_wifi_password"
+}
 ```
 
 ## Supplementary Software Packages
