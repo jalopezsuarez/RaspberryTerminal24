@@ -1003,34 +1003,122 @@ Use client keyboard mapping / Usar la asignación de teclados de cliente.
 
 ## Enhanced System: Raspberry Debian Linux Thinclient Optimizations (remmina / monopuesto / autorun)
 
-text
-
-```
-code
-```
-
-### Remina + iDesktop Integration (remmina.py)
-
-text
-
-```
-code
-```
-
 ### Monopuesto Service (monopuesto.py)
 
-text
+Los sistemas de inicialización SysV o Upstart están prácticamente en desuso, o al menos la intención es migrar a systemd. Aún se conservan servicios con scripts de inicio SysV y distribuciones que prefieren Upstart para inicializar y administrar los niveles de ejecución. Por defecto Debian (Raspiban) ya tiene preinstalado systemd para la gestion de servicios.
 
 ```
-code
+sudo vi /etc/systemd/system/monopuesto.service
+```
+
+```
+[Unit]
+Description=Monopuesto Service
+After=graphical.target
+
+[Service]
+Environment=DISPLAY=:0
+User=pi
+ExecStart=/bin/sh -x -c 'export DISPLAY=:0;/usr/bin/remmina -c `python /home/pi/terms/bin/monopuesto.py`'
+WorkingDirectory=/home/pi/terms/bin
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+```
+
+```
+sudo systemctl start monopuesto.service
+sudo systemctl enable monopuesto.service
 ```
 
 ### Autorun Service
 
-text
+Sistemas de autoarranque de aplicacion java de escritorio y modo root.
 
 ```
-code
+sudo vi /etc/systemd/system/autorun.service
+```
+
+```
+[Unit]
+Description=Autorun Service
+After=graphical.target
+
+[Service]
+Environment=DISPLAY=:0
+User=pi
+ExecStart=/usr/lib/jvm/jdk8/bin/java -jar /home/pi/app/app.jar
+WorkingDirectory=/home/pi/terms/var
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+```
+
+```
+sudo systemctl enable autorun.service
+sudo systemctl start autorun.service
+```
+
+### Remina + iDesktop Integration (remmina.py)
+
+Con el siguiente scripts se automáticamente en cada inicio del sistema se sincronizaran todos las configuraciones que existan en la utilidad Remmina como enlaces en el escritorio. Basicamente limpirara todos los accesos existentes en iDesk (.idesktop) y convertirá todos los enlaces de Remmina en accesos directos preconfigurados (.remmina). El archivo que deberá ejecutarse cada vez que use inicie el sistema de ventanas OpenBox (autostart.sh) `/home/pi/terms/bin/remmina.py` contiene un script que sera necesario ejecutarlo al inicio de cada sesión para sincronizar los accesos remotos.
+
+```
+import os
+import shutil
+import mmap
+
+remmina = ('/home/pi/.local/share/remmina/')
+idesktop = ('/home/pi/.idesktop/')
+
+link = """table Icon
+Caption: %s
+Command: remmina -c /home/pi/.local/share/remmina/%s.remmina
+Icon: /home/pi/terms/share/remmina/remmina.png
+Width: 64
+Height: 64
+end"""
+
+shutil.rmtree(idesktop)
+if not os.path.exists(idesktop):
+    os.makedirs(idesktop)
+
+resources = os.listdir(remmina)
+for filename in resources:
+    if filename.endswith('.remmina'):
+        connection, extension = os.path.splitext(filename)
+        shortcut = idesktop + connection + '.lnk'
+        with open(remmina + filename,'r') as f:
+            m = mmap.mmap(f.fileno(), 0, prot=mmap.PROT_READ)
+            while True:
+                line = m.readline()
+                if line == '': break
+                if line.startswith('name'):
+                    property = line.split('=')
+                    connectionName = property[1].strip()
+                    connectionFile = open(shortcut, 'w')
+                    connectionFile.write(link % (connectionName, connection))
+                    connectionFile.close()
+```
+
+El otro script necesario a ejecutar el modo monopuesto obteniendo la primera conexión disponible para lanzarla al iniciar el box `/home/pi/terms/bin/monopuesto.py`:
+
+```
+import sys
+import os
+import shutil
+import mmap
+
+remmina = ('/home/pi/.local/share/remmina/')
+
+resources = os.listdir(remmina)
+for filename in resources:
+    if filename.endswith('.remmina'):
+        with open(remmina + filename,'r') as f:
+            print remmina + filename
+            sys.exit(0)
 ```
 
 ## Splash Boot Screen (Plymouth native official)
