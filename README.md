@@ -269,7 +269,7 @@ Nos vamos a la utilidad de raspi-config y establecemos las opciones de X11 como 
 
 ```
 sudo raspi-config 
-Raspi-Config :: 9 Advanced Options :: A6 Wayland to X11
+Raspi-Config :: 6 Advanced Options :: A6 Wayland to X11
 ```
 
 ### System Autologin
