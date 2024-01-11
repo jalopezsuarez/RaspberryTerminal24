@@ -1028,8 +1028,8 @@ WantedBy=multi-user.target
 ```
 
 ```
-sudo systemctl start monopuesto.service
 sudo systemctl enable monopuesto.service
+sudo systemctl start monopuesto.service
 ```
 
 ### Autorun Service
