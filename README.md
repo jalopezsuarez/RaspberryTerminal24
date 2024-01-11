@@ -1053,9 +1053,13 @@ sudo update-initramfs -u
 sudo vi /boot/cmdline.txt
 ```
 
-Add following commands after rootwait:
+El contenido del archivo original es el siguiente (cambiando el PARTUUID por el correspondiente):
 
-AGREGAR COPIA ENTERA!!
+```
+console=serial0,115200 console=tty1 root=PARTUUID=fb5e9b5d-02 rootfstype=ext4 fsck.repair=yes rootwait
+```
+
+Add following commands after rootwait:
 
 ```
 loglevel=0 vt.global_cursor_default=0 logo.nologo quiet splash plymouth.enable=1 plymouth.ignore-serial-consoles
