@@ -1019,7 +1019,7 @@ After=graphical.target
 [Service]
 Environment=DISPLAY=:0
 User=pi
-ExecStart=/bin/sh -x -c 'export DISPLAY=:0;/usr/bin/remmina -c `python /home/pi/terms/bin/monopuesto.py`'
+ExecStart=/bin/sh -x -c 'export DISPLAY=:0;/usr/local/bin/remmina -c `python /home/pi/terms/bin/monopuesto.py`'
 WorkingDirectory=/home/pi/terms/bin
 Restart=always
 
