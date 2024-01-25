@@ -1195,6 +1195,7 @@ Gestionar las conexiones de red utilizando el archivo `/etc/network/interfaces` 
 sudo vi /etc/network/interfaces
 ```
 
+Network Setup: DHCP
 ```
 # terminal: 25/01/2024 18:49:10
 # Warning! Network configuration automatically generated and modifications may be overwritten and lost.
@@ -1208,6 +1209,30 @@ iface eth0 inet dhcp
 auto wlan0
 iface wlan0 inet dhcp
 wpa-conf /etc/wpa_supplicant.conf
+```
+
+Network Setup: STATIC (sample)
+```
+# terminal: 25/01/2024 18:49:10
+# Warning! Network configuration automatically generated and modifications may be overwritten and lost.
+
+auto lo
+iface lo inet loopback
+
+auto eth0
+iface eth0 inet static
+address 192.168.0.2
+netmask 255.255.255.0
+gateway 192.168.0.1
+dns-nameservers 192.168.0.1
+
+auto wlan0
+iface wlan0 inet static
+wpa-conf /etc/wpa_supplicant.conf
+address 192.168.0.3
+netmask 255.255.255.0
+gateway 192.168.0.1
+dns-nameservers 192.168.0.1
 ```
 
 ```
