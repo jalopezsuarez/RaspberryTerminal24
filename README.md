@@ -1250,6 +1250,24 @@ network={
 }
 ```
 
+### Wi-Fi WPA Supplicant: Auxiliary Commands Tools 
+
+```
+sudo chmod 600 /etc/wpa_supplicant/wpa_supplicant.conf
+```
+
+```
+sudo vi /etc/wpa_supplicant/wpa_supplicant.conf
+ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+update_config=1
+```
+
+```
+sudo killall wpa_supplicant
+sudo wpa_supplicant -B -iwlan0 -c /etc/wpa_supplicant/wpa_supplicant.conf
+sudo wpa_cli -iwlan0 status
+```
+
 ## Supplementary Software Packages
 
 Here are a set of additional tools that are useful for the management and use of the thin client system.
