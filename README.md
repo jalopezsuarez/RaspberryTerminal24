@@ -1189,34 +1189,30 @@ sudo apt-get install -y wpagui
 
 ### Manual Network Setup (network interfaces)
 
-Gestionar las conexiones de red utilizando el archivo `dhcpcd.conf` editandolo con el editor de textos:
+Gestionar las conexiones de red utilizando el archivo `/etc/network/interfaces` editandolo con el editor de textos:
 
 ```
-sudo vi /etc/dhcpcd.conf
+sudo vi /etc/network/interfaces
 ```
 
 ```
-# ########################################################
-# Ethernet interface
-
-#interface eth0
-#static ip_address=192.168.0.128/24
-#static routers=192.168.0.1
-#static domain_name_servers=8.8.8.8 8.8.4.4
-
-# ########################################################
-# Wi-Fi interface
-
-interface wlan0
-static ip_address=192.168.0.128/24
-static routers=192.168.0.1
-static domain_name_servers=8.8.8.8 8.8.4.4
-
-# #######################################################
-# Network Defaults
+# terminal: 25/01/2024 18:49:10
+# Warning! Network configuration automatically generated and modifications may be overwritten and lost.
 
 auto lo
 iface lo inet loopback
+
+auto eth0
+iface eth0 inet dhcp
+
+auto wlan0
+iface wlan0 inet dhcp
+wpa-conf /etc/wpa_supplicant.conf
+```
+
+```
+sudo ifdown eth0 && sudo ifup eth0
+sudo ifdown wlan0 && sudo ifup wlan0
 ```
 
 ### Manual Wi-Fi Setup (wpa_supplicant)
