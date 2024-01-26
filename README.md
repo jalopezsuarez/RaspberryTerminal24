@@ -1313,8 +1313,8 @@ dns-nameservers 192.168.0.1
 ```
 
 ```
-sudo ifdown eth0 && sudo ifup eth0
-sudo ifdown wlan0 && sudo ifup wlan0
+sudo ifdown --force --ignore-errors eth0 wlan0
+sudo ifup --force --ignore-errors eth0 wlan0
 ```
 
 ### Wi-Fi WPA Supplicant: FIX Debian 12 Problems
