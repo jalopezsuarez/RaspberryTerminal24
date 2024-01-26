@@ -600,6 +600,60 @@ table Actions
 end
 ```
 
+### iDesktop FIX: Icons Left Desktop
+
+Modifca el archivo `src/XdesktopContainer.cpp` y vuelve a recompilar (`make -j`):
+
+```
+void XDesktopContainer::arrangeIcons()
+{
+    int maxW = 0;
+    int iconX, iconY = 20;
+ 
+    if( iconList.size() == 0 )
+    {
+        cout << "No Icons! Quitting.\n";
+        _exit(1);
+    }
+
+    for(unsigned int i = 0; i < iconList.size(); i++ )
+    {
+        XIcon *iPtr = dynamic_cast<XIcon *>(iconList[i]);
+        if( iPtr->getWidth() > maxW )
+            maxW = iPtr->getWidth();
+    }
+
+    iconX = 30; //terminal-fix: iconX = widthOfScreen() - maxW - 20;
+
+    for(unsigned int i = 0; i < iconList.size(); i++ )
+    {
+        XIcon *iPtr = dynamic_cast<XIcon *>(iconList[i]);
+
+        if( iconY + iPtr->getHeight() + 30 + iPtr->getFontHeight() >
+                heightOfScreen() )
+        {
+            iconY = 20;
+            iconX = iconX + 30 + maxW; //terminal-fix: iconX = iconX - 20 - maxW;
+        }
+ 
+        if( iPtr->getX() == 0 && iPtr->getY() == 0 )
+        {
+            iPtr->setX(iconX + ((maxW - iPtr->getWidth())/2));
+            iPtr->setY(iconY);
+            iconY += iPtr->getHeight() + 30 + iPtr->getFontHeight();
+        }
+
+        iPtr->moveImageWindow();
+        iPtr->mapImageWindow();
+        //don't initially map caption for the hover effect
+        iPtr->initMapCaptionWindow();
+ 
+        //iPtr->draw();
+         
+    }
+}
+```
+
 ## Conky Compilation and Configuration (version 1.9.0)
 
 This guide assists in compiling and configuring Conky, a system monitor tool.
