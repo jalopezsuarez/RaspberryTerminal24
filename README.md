@@ -889,6 +889,12 @@ sudo apt install -y libxtst-dev
 ### Java Development Enviroment
 
 ```
+cd ~/terms/repos/jdk-8u271-linux-aarch64
+zip -s- jdk-8u271-linux-aarch64-parts.zip -O jdk-8u271-linux-aarch64-ok.zip
+unzip jdk-8u271-linux-aarch64-ok.zip
+```
+
+```
 sudo mkdir /usr/lib/jvm
 sudo cp ~/terms/repos/jdk-8u271-linux-aarch64.tar.gz /usr/lib/jvm
 cd /usr/lib/jvm
