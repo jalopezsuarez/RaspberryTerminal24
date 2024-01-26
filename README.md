@@ -1259,9 +1259,11 @@ auto lo
 iface lo inet loopback
 
 auto eth0
+allow-hotplug eth0
 iface eth0 inet dhcp
 
 auto wlan0
+allow-hotplug wlan0
 iface wlan0 inet dhcp
 wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf
 ```
@@ -1275,6 +1277,7 @@ auto lo
 iface lo inet loopback
 
 auto eth0
+allow-hotplug eth0
 iface eth0 inet static
 address 192.168.0.2
 netmask 255.255.255.0
@@ -1282,6 +1285,7 @@ gateway 192.168.0.1
 dns-nameservers 192.168.0.1
 
 auto wlan0
+allow-hotplug wlan0
 iface wlan0 inet static
 wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf
 address 192.168.0.3
