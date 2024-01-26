@@ -132,22 +132,26 @@ sudo apt-get install -y xterm
 Once installed, you can enhance the console by adjusting colors and font settings in the following file:
 
 ```
-vi ~/.Xdefaults
+vi ~/.Xresources
 ```
 
-NOTE: Leave a space at the beginning and end of the file!
+These adjustments will help you customize and improve your XTerminal experience. NOTE: Leave a space at the beginning and end of the file!
 
 ```
 
 XTerm*background: black
 XTerm*foreground: WhiteSmoke
-XTerm*faceSize: 11
 XTerm*faceName: DejaVu Sans Mono
+XTerm*faceSize: 11
 XTerm*renderFont: true
 
 ```
 
-These adjustments will help you customize and improve your XTerminal experience.
+Para que los cambios surtan efecto, debes fusionar el archivo .Xresources con tu base de recursos actual ejecutando desde XWindow:
+
+```
+xrdb -merge ~/.Xresources
+```
 
 ### Setting System Language and Keyboard Layout
 
