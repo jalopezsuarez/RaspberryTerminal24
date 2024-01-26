@@ -542,6 +542,13 @@
     <!-- show the manage desktops section in the client-list-(combined-)menu -->
   </menu>
   <applications>
+    <!-- terminal -->
+    <application class="org.remmina.Remmina">
+      <position force="yes">
+        <x>center</x>
+        <y>center</y>
+      </position>
+    </application>          
     <!--
   # this is an example with comments through out. use these to make your
   # own rules, but without the comments of course.
