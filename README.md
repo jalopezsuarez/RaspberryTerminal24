@@ -19,6 +19,24 @@ Utilizing the official Raspberry Pi Imager program version 1.8.1 to install the 
 2023-12-05-raspios-bookworm-arm64-lite.img.xz
 ```
 
+### Reference Tools (MacOS)
+
+This will give you a list of the disks and volumes inside or connected to your computer. The Pi SD card will contain a Linux partition under TYPE NAME:
+
+```
+diskutil list
+```
+
+Now you’re ready to duplicate the SD card, saving it as a disk image file on your hard drive:
+```
+sudo dd if=/dev/rdiskX of=2024-01-25-terminal.img bs=1m
+```
+
+Re-flashing the SD card then becomes:
+```
+sudo dd if=2024-01-25-terminal.img of=/dev/rdiskX bs=1m
+```
+
 ## System: Initial Setup and Advanced Customization for Debian Systems
 
 Essential configurations for Raspberry Debian-based systems.
