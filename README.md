@@ -1357,14 +1357,14 @@ Correccion del modulo `functions.sh`:
 
 ```
 sudo killall wpa_supplicant
-sudo wpa_supplicant -B -c /etc/wpa_supplicant.conf -iwlan0
+sudo wpa_supplicant -B -c /etc/wpa_supplicant/wpa_supplicant.conf -iwlan0
 sudo wpa_cli -iwlan0 status
 ```
 
 Open the `wpa-supplicant` configuration file in text editor:
 
 ```
-sudo vi /etc/wpa_supplicant.conf
+sudo vi /etc/wpa_supplicant/wpa_supplicant.conf
 ```
 ```
 network={
