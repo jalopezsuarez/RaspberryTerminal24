@@ -1263,7 +1263,7 @@ iface eth0 inet dhcp
 
 auto wlan0
 iface wlan0 inet dhcp
-wpa-conf /etc/wpa_supplicant.conf
+wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf
 ```
 
 Network Setup: STATIC (sample with static address)
@@ -1283,7 +1283,7 @@ dns-nameservers 192.168.0.1
 
 auto wlan0
 iface wlan0 inet static
-wpa-conf /etc/wpa_supplicant.conf
+wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf
 address 192.168.0.3
 netmask 255.255.255.0
 gateway 192.168.0.1
@@ -1297,9 +1297,60 @@ sudo ifdown wlan0 && sudo ifup wlan0
 
 ### Wi-Fi WPA Supplicant: FIX Debian 12 Problems
 
+En caso de fallar el `wpa_supplicant` iniciando el sistema de red `wlan0`:
+
 ```
-sudo chmod 600 /etc/wpa_supplicant/wpa_supplicant.conf
-sudo mv /etc/wpa_supplicant/wpa_supplicant.conf /etc/wpa_supplicant.conf
+sudo systemctl --failed
+systemctl status networking.service 
+```
+
+```
+networking.service - Raise network interfaces
+Loaded: loaded (/lib/systemd/system/networking.service; enabled; vendor preset: enabled)
+Active: failed (Result: exit-code) since Wed 2019-05-22 08:42:26 EAT; 2h 17min ago
+Docs: man:interfaces(5)
+Process: 348 ExecStart=/sbin/ifup -a --read-environment (code=exited, status=1/FAILURE)
+Main PID: 348 (code=exited, status=1/FAILURE)
+
+May 22 08:42:19 gate dhclient[395]: DHCPACK of 192.168.37.147 from 192.168.37.1
+May 22 08:42:19 gate ifup[348]: DHCPACK of 192.168.37.147 from 192.168.37.1
+May 22 08:42:20 gate dhclient[395]: bound to 192.168.37.147 -- renewal in 20857 seconds.
+May 22 08:42:20 gate ifup[348]: bound to 192.168.37.147 -- renewal in 20857 seconds.
+May 22 08:42:26 gate ifup[348]: /etc/network/if-pre-up.d/wpasupplicant: 120: /etc/network/if-pre-up.d/wpasupplicant: cannot create /dev/stderr: No such dev
+May 22 08:42:26 gate ifup[348]: run-parts: /etc/network/if-pre-up.d/wpasupplicant exited with return code 1
+May 22 08:42:26 gate ifup[348]: ifup: failed to bring up wlan0
+May 22 08:42:26 gate systemd[1]: networking.service: Main process exited, code=exited, status=1/FAILURE
+May 22 08:42:26 gate systemd[1]: networking.service: Failed with result 'exit-code'.
+May 22 08:42:26 gate systemd[1]: Failed to start Raise network interfaces.
+```
+
+Correccion del modulo `functions.sh`:
+
+```
+--(snip)--
+# diff -u /etc/wpa_supplicant/functions.sh /tmp/functions.sh 
+--- /etc/wpa_supplicant/functions.sh    2017-02-20 11:55:11.000000000 +0100
++++ /tmp/functions.sh   2017-08-10 13:58:58.532248148 +0200
+@@ -49,7 +49,7 @@
+ 
+ # verbosity variables
+ if [ -n "$IF_WPA_VERBOSITY" ] || [ "$VERBOSITY" = "1" ]; then
+-       TO_NULL="/dev/stdout"
++       TO_NULL="&1"
+        DAEMON_VERBOSITY="--verbose"
+ else
+        TO_NULL="/dev/null"
+@@ -117,7 +117,7 @@
+                        ;;
+                "stderr")
+                        shift
+-                       echo "$WPA_SUP_PNAME: $@" >/dev/stderr
++                       echo "$WPA_SUP_PNAME: $@" >&2
+                        ;;
+                *)
+                        ;;
+# 
+--(snip)--
 ```
 
 ### Manual Wi-Fi Setup (wpa_supplicant)
