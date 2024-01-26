@@ -142,7 +142,7 @@ These adjustments will help you customize and improve your XTerminal experience.
 XTerm*background: black
 XTerm*foreground: WhiteSmoke
 XTerm*faceName: DejaVu Sans Mono
-XTerm*faceSize: 11
+XTerm*faceSize: 10
 XTerm*renderFont: true
 
 ```
