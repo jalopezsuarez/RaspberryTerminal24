@@ -30,9 +30,6 @@ public class GeneralService
     public final static String DISPLAY_VALUE_ON = "xserver-command";
     public final static String DISPLAY_VALUE_OFF = "#xserver-command";
 
-    public final static String KEYBOARD_FLAG = "/home/pi/terms/var/keyboard.enabled";
-    public final static String KEYBOARD_EXEC_COMMAND = "/usr/bin/florence";
-
     public final static String TERMINAL_EXEC_COMMAND = "/usr/bin/xterm";
 
     // =======================================================
@@ -88,37 +85,6 @@ public class GeneralService
 
         String write = (value) ? GeneralService.DISPLAY_VALUE_ON : GeneralService.DISPLAY_VALUE_OFF;
         systemFile.write(GeneralService.DISPLAY_FILE, GeneralService.DISPLAY_REGEX, GeneralService.DISPLAY_REPLACE, write);
-    }
-
-    public void launchKeyboard() throws Exception
-    {
-        Runtime.getRuntime().exec(new String[]
-        {
-            "sh", "-c", "sudo -u pi " + GeneralService.KEYBOARD_EXEC_COMMAND
-        });
-    }
-
-    public boolean populateKeyboard() throws Exception
-    {
-        boolean checkMonopuesto = false;
-
-        FileSystem systemFile = new FileSystem();
-        checkMonopuesto = systemFile.exists(GeneralService.KEYBOARD_FLAG);
-
-        return checkMonopuesto;
-    }
-
-    public void depopulateKeyboard(boolean value) throws Exception
-    {
-        FileSystem systemFile = new FileSystem();
-        if (value)
-        {
-            systemFile.create(GeneralService.KEYBOARD_FLAG);
-        }
-        else
-        {
-            systemFile.delete(GeneralService.KEYBOARD_FLAG);
-        }
     }
 
     public void lauchTerminal() throws Exception

@@ -23,153 +23,183 @@ public class NetworkService
 {
     // =======================================================
 
-    public final static String NETWORK_FILE = "/etc/dhcpcd.conf";
-
-    public final static String NETWORK_INTERFACE_REGEX = "interface eth0";
-    public final static String NETWORK_ADDRESS_REGEX = "static ip_address";
-    public final static String NETWORK_ROUTERS_REGEX = "static routers";
-    public final static String NETWORK_DOMAINS_REGEX = "static domain_name_servers";
-
-    public final static String WIRELESS_INTERFACE_REGEX = "interface wlan0";
-    public final static String WIRELESS_ADDRESS_REGEX = "static ip_address";
-    public final static String WIRELESS_ROUTERS_REGEX = "static routers";
-    public final static String WIRELESS_DOMAINS_REGEX = "static domain_name_servers";
+    public final static String NETWORK_FILE = "/etc/network/interfaces";
 
     public final static String WIRELESS_COMMAND = "/usr/sbin/wpa_gui";
 
     // =======================================================
-    public NetworkQuery populate() throws Exception
+    
+    public NetworkQuery populate() throws Exception 
     {
-        NetworkQuery populate = null;
-        populate = new NetworkQuery();
-
-        // =======================================================
-        List<String> contentNetwork = new ArrayList<>();
-        try (BufferedReader br = new BufferedReader(new FileReader(NetworkService.NETWORK_FILE)))
+        NetworkQuery networkQuery = new NetworkQuery();
+        try (BufferedReader br = new BufferedReader(new FileReader(NETWORK_FILE))) 
         {
-            String str;
-            while ((str = br.readLine()) != null)
+            String line;
+            boolean isEth0 = false;
+            boolean isWlan0 = false;
+
+            while ((line = br.readLine()) != null) 
             {
-                contentNetwork.add(str);
-            }
-        }
-
-        // -------------------------------------------------------
-        int eth0 = -1;
-        int wlan0 = -1;
-
-        String eth0AddressField = "";
-        String eth0RoutersField = "";
-        String eth0NameServersField = "";
-
-        String wlan0AddressField = "";
-        String wlan0RoutersField = "";
-        String wlan0NameServersField = "";
-
-        for (int i = 0; i < contentNetwork.size(); i++)
-        {
-            if (contentNetwork.get(i).trim().equals(NetworkService.NETWORK_INTERFACE_REGEX))
-            {
-                eth0 = i;
-                if (contentNetwork.get(i + 1).trim().startsWith(NetworkService.NETWORK_ADDRESS_REGEX))
+                if (line.contains("auto eth0")) 
                 {
-                    String arr[] = contentNetwork.get(i + 1).split("=");
-                    if (arr.length > 1 && arr[1].trim().length() > 0)
+                    isEth0 = true;
+                    isWlan0 = false;
+                } 
+                else if (isEth0) 
+                {
+                    if (line.trim().startsWith("iface eth0 inet dhcp")) 
                     {
-                        eth0AddressField = arr[1].replaceAll("\\s+", "").toLowerCase();
-                    }
+                        networkQuery.setNetworkDHCP(true);
+                    } 
+                    else if (line.trim().startsWith("iface eth0 inet static")) 
+                    {
+                        networkQuery.setNetworkDHCP(false);
+                    } 
+                    else if (line.trim().startsWith("address")) 
+                    {
+                        networkQuery.setNetworkAddress(line.split(" ")[1]);
+                    } 
+                    else if (line.trim().startsWith("netmask")) 
+                    {
+                        networkQuery.setNetworkMask(line.split(" ")[1]);
+                    } 
+                    else if (line.trim().startsWith("gateway")) 
+                    {
+                        networkQuery.setNetworkRouters(line.split(" ")[1]);
+                    } 
+                    else if (line.trim().startsWith("dns-nameservers")) 
+                    {
+                        networkQuery.setNetworkDomainNameServers(line.split(" ")[1]);
+                    } 
                 }
-                if (contentNetwork.get(i + 2).trim().startsWith(NetworkService.NETWORK_ROUTERS_REGEX))
+                
+                // =======================================================                
+                
+                if (line.contains("allow-hotplug wlan0")) 
                 {
-                    String arr[] = contentNetwork.get(i + 2).split("=");
-                    if (arr.length > 1 && arr[1].trim().length() > 0)
-                    {
-                        eth0RoutersField = arr[1].replaceAll("\\s+", "").toLowerCase();
-                    }
-                }
-                if (contentNetwork.get(i + 3).trim().startsWith(NetworkService.NETWORK_DOMAINS_REGEX))
+                    isEth0 = false;
+                    isWlan0 = true;
+                } 
+                else if (isWlan0) 
                 {
-                    String arr[] = contentNetwork.get(i + 3).split("=");
-                    if (arr.length > 1 && arr[1].trim().length() > 0)
+                    if (line.trim().startsWith("iface wlan0 inet dhcp")) 
                     {
-                        eth0NameServersField = arr[1].trim().toLowerCase();
-                    }
-                }
-            }
-
-            // -------------------------------------------------------
-            if (contentNetwork.get(i).trim().equals(NetworkService.WIRELESS_INTERFACE_REGEX))
-            {
-                wlan0 = i;
-                if (contentNetwork.get(i + 1).trim().startsWith(NetworkService.WIRELESS_ADDRESS_REGEX))
-                {
-                    String arr[] = contentNetwork.get(i + 1).split("=");
-                    if (arr.length > 1 && arr[1].trim().length() > 0)
+                        networkQuery.setWirelessDHCP(true);
+                    } 
+                    else if (line.trim().startsWith("iface wlan0 inet static")) 
                     {
-                        wlan0AddressField = arr[1].replaceAll("\\s+", "").toLowerCase();
-                    }
-                }
-                if (contentNetwork.get(i + 2).trim().startsWith(NetworkService.WIRELESS_ROUTERS_REGEX))
-                {
-                    String arr[] = contentNetwork.get(i + 2).split("=");
-                    if (arr.length > 1 && arr[1].trim().length() > 0)
+                        networkQuery.setWirelessDHCP(false);
+                    } 
+                    else if (line.trim().startsWith("address")) 
                     {
-                        wlan0RoutersField = arr[1].replaceAll("\\s+", "").toLowerCase();
-                    }
-                }
-                if (contentNetwork.get(i + 3).trim().startsWith(NetworkService.WIRELESS_DOMAINS_REGEX))
-                {
-                    String arr[] = contentNetwork.get(i + 3).split("=");
-                    if (arr.length > 1 && arr[1].trim().length() > 0)
+                        networkQuery.setWirelessAddress(line.split(" ")[1]);
+                    } 
+                    else if (line.trim().startsWith("netmask")) 
                     {
-                        wlan0NameServersField = arr[1].trim().toLowerCase();
-                    }
+                        networkQuery.setWirelessMask(line.split(" ")[1]);
+                    } 
+                    else if (line.trim().startsWith("gateway")) 
+                    {
+                        networkQuery.setWirelessRouters(line.split(" ")[1]);
+                    } 
+                    else if (line.trim().startsWith("dns-nameservers")) 
+                    {
+                        networkQuery.setWirelessDomainNameServers(line.split(" ")[1]);
+                    } 
                 }
             }
         }
-
-        // =======================================================
-        if (eth0 > 0)
-        {
-            populate.setNetworkDHCP(false);
-
-            IPv4 ipv4 = new IPv4(eth0AddressField);
-            populate.setNetworkAddress(ipv4.getIP());
-            populate.setNetworkMask(ipv4.getNetmask());
-
-            populate.setNetworkRouters(eth0RoutersField);
-            populate.setNetworkDomainNameServers(eth0NameServersField);
-        }
-
-        if (wlan0 > 0)
-        {
-            populate.setWirelessDHCP(false);
-
-            IPv4 ipv4 = new IPv4(wlan0AddressField);
-            populate.setWirelessAddress(ipv4.getIP());
-            populate.setWirelessMask(ipv4.getNetmask());
-
-            populate.setWirelessRouters(wlan0RoutersField);
-            populate.setWirelessDomainNameServers(wlan0NameServersField);
-        }
-
-        // =======================================================
-        boolean networkDHCP = false;
-        networkDHCP = networkDHCP || eth0AddressField == null || eth0AddressField.length() <= 0;
-        networkDHCP = networkDHCP || eth0RoutersField == null || eth0RoutersField.length() <= 0;
-        networkDHCP = networkDHCP || eth0NameServersField == null || eth0NameServersField.length() <= 0;
-        populate.setNetworkDHCP(networkDHCP);
-
-        boolean wirelessDHCP = false;
-        wirelessDHCP = wirelessDHCP || wlan0AddressField == null || wlan0AddressField.length() <= 0;
-        wirelessDHCP = wirelessDHCP || wlan0RoutersField == null || wlan0RoutersField.length() <= 0;
-        wirelessDHCP = wirelessDHCP || wlan0NameServersField == null || wlan0NameServersField.length() <= 0;
-        populate.setWirelessDHCP(wirelessDHCP);
-
-        // =======================================================
-        return populate;
+        
+        return networkQuery;
     }
 
+    public void depopulate(NetworkQuery networkQuery) throws Exception 
+    {
+        List<String> lines = new ArrayList<>();
+        
+        // =======================================================        
+
+        lines.add("# terminal: " + java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")));
+        lines.add("# Warning! Network configuration automatically generated and modifications may be overwritten and lost.");
+
+        lines.add(" ");
+        lines.add("auto lo");
+        lines.add("iface lo inet loopback");
+
+        lines.add(" ");
+        lines.add("auto eth0");
+        if (networkQuery.isNetworkDHCP()) 
+        {
+            lines.add("iface eth0 inet dhcp");
+        } 
+        else 
+        {
+            lines.add("iface eth0 inet static");
+            if (networkQuery.getNetworkAddress() != null && networkQuery.getNetworkAddress().trim().length() > 0)
+                lines.add("address " + networkQuery.getNetworkAddress());
+            if (networkQuery.getNetworkMask() != null && networkQuery.getNetworkMask().trim().length() > 0)
+                lines.add("netmask " + networkQuery.getNetworkMask());
+            if (networkQuery.getNetworkRouters() != null && networkQuery.getNetworkRouters().trim().length() > 0)
+                lines.add("gateway " + networkQuery.getNetworkRouters());
+            if (networkQuery.getNetworkDomainNameServers() != null && networkQuery.getNetworkDomainNameServers().trim().length() > 0)
+                lines.add("dns-nameservers " + networkQuery.getNetworkDomainNameServers());
+        }
+        
+        // =======================================================        
+
+        lines.add(" ");
+        lines.add("allow-hotplug wlan0");
+        if (networkQuery.isWirelessDHCP()) 
+        {
+            lines.add("iface wlan0 inet dhcp");
+            lines.add("wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf");
+        } 
+        else 
+        {
+            lines.add("iface wlan0 inet static");
+            lines.add("wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf");
+            if (networkQuery.getWirelessAddress() != null && networkQuery.getWirelessAddress().trim().length() > 0)
+                lines.add("address " + networkQuery.getWirelessAddress());
+            if (networkQuery.getWirelessMask() != null && networkQuery.getWirelessMask().trim().length() > 0)
+                lines.add("netmask " + networkQuery.getWirelessMask());
+            if (networkQuery.getWirelessRouters() != null && networkQuery.getWirelessRouters().trim().length() > 0)
+                lines.add("gateway " + networkQuery.getWirelessRouters());
+            if (networkQuery.getWirelessDomainNameServers() != null && networkQuery.getWirelessDomainNameServers().trim().length() > 0)
+                lines.add("dns-nameservers " + networkQuery.getWirelessDomainNameServers());
+        }
+        
+        // =======================================================        
+
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(NETWORK_FILE))) 
+        {
+            for (String line : lines) 
+            {
+                bw.write(line);
+                bw.newLine();
+            }
+        }
+
+        // =======================================================
+        // =======================================================
+        {
+            ProcessBuilder processBuilder = new ProcessBuilder("ifdown", "--force", "--ignore-errors", "eth0", "wlan0");
+            processBuilder.directory(new File("/tmp"));
+            Process p = processBuilder.start();
+            p.waitFor();
+        }
+        {
+            ProcessBuilder processBuilder = new ProcessBuilder("ifup", "--force", "--ignore-errors", "eth0", "wlan0");
+            processBuilder.directory(new File("/tmp"));
+            Process p = processBuilder.start();
+            //p.waitFor();
+        }
+        
+        // =======================================================
+        // =======================================================
+    }
+    
+    // =======================================================
+    
     public void validateNetwork(NetworkQuery network) throws Exception
     {
         try
@@ -278,219 +308,10 @@ public class NetworkService
         {
             throw new DNSWirelessException();
         }
-    }
-
-    public void depopulate(NetworkQuery network) throws Exception
-    {
-        List<String> contentNetwork = new ArrayList<>();
-        try (BufferedReader br = new BufferedReader(new FileReader(NetworkService.NETWORK_FILE)))
-        {
-            String str;
-            while ((str = br.readLine()) != null)
-            {
-                contentNetwork.add(str);
-            }
-        }
-
-        // =======================================================
-        int eth0 = -1;
-        int wlan0 = -1;
-
-        String eth0AddressField = "";
-        String eth0RoutersField = "";
-        String eth0NameServersField = "";
-
-        String wlan0AddressField = "";
-        String wlan0RoutersField = "";
-        String wlan0NameServersField = "";
-
-        // =======================================================
-        for (int i = 0; i < contentNetwork.size(); i++)
-        {
-            if (contentNetwork.get(i).trim().startsWith(NetworkService.NETWORK_INTERFACE_REGEX))
-            {
-                if (contentNetwork.get(i).trim().length() > 0)
-                {
-                    eth0 = i;
-                }
-            }
-        }
-
-        // -------------------------------------------------------
-        try
-        {
-            IPv4 networkIPv4 = new IPv4(network.getNetworkAddress(), network.getNetworkMask());
-            eth0AddressField = networkIPv4.getCIDR();
-
-            eth0RoutersField = network.getNetworkRouters();
-            eth0NameServersField = network.getNetworkDomainNameServers();
-        }
-        catch (Exception ex)
-        {
-            network.setNetworkDHCP(true);
-        }
-
-        // -------------------------------------------------------
-        if (eth0 < 0)
-        {
-            eth0 = contentNetwork.size();
-            contentNetwork.add("");
-            contentNetwork.add(eth0 + 0, NetworkService.NETWORK_INTERFACE_REGEX);
-            contentNetwork.add(eth0 + 1, NetworkService.NETWORK_ADDRESS_REGEX + "=" + eth0AddressField);
-            contentNetwork.add(eth0 + 2, NetworkService.NETWORK_ROUTERS_REGEX + "=" + eth0RoutersField);
-            contentNetwork.add(eth0 + 3, NetworkService.NETWORK_DOMAINS_REGEX + "=" + eth0NameServersField);
-        }
-        else
-        {
-            contentNetwork.set(eth0 + 0, NetworkService.NETWORK_INTERFACE_REGEX);
-            contentNetwork.set(eth0 + 1, NetworkService.NETWORK_ADDRESS_REGEX + "=" + eth0AddressField);
-            contentNetwork.set(eth0 + 2, NetworkService.NETWORK_ROUTERS_REGEX + "=" + eth0RoutersField);
-            contentNetwork.set(eth0 + 3, NetworkService.NETWORK_DOMAINS_REGEX + "=" + eth0NameServersField);
-        }
-
-        // =======================================================
-        // =======================================================
-        for (int i = 0; i < contentNetwork.size(); i++)
-        {
-            if (contentNetwork.get(i).trim().startsWith(NetworkService.WIRELESS_INTERFACE_REGEX))
-            {
-                if (contentNetwork.get(i).trim().length() > 0)
-                {
-                    wlan0 = i;
-                }
-            }
-        }
-
-        // -------------------------------------------------------
-        try
-        {
-            IPv4 wirelessIPv4 = new IPv4(network.getWirelessAddress(), network.getWirelessMask());
-            wlan0AddressField = wirelessIPv4.getCIDR();
-
-            wlan0RoutersField = network.getWirelessRouters();
-            wlan0NameServersField = network.getWirelessDomainNameServers();
-        }
-        catch (Exception ex)
-        {
-            network.setWirelessDHCP(true);
-        }
-
-        // -------------------------------------------------------
-        if (wlan0 < 0)
-        {
-            wlan0 = contentNetwork.size();
-            contentNetwork.add("");
-            contentNetwork.add(wlan0 + 0, NetworkService.WIRELESS_INTERFACE_REGEX);
-            contentNetwork.add(wlan0 + 1, NetworkService.WIRELESS_ADDRESS_REGEX + "=" + wlan0AddressField);
-            contentNetwork.add(wlan0 + 2, NetworkService.WIRELESS_ROUTERS_REGEX + "=" + wlan0RoutersField);
-            contentNetwork.add(wlan0 + 3, NetworkService.WIRELESS_DOMAINS_REGEX + "=" + wlan0NameServersField);
-        }
-        else
-        {
-            contentNetwork.set(wlan0 + 0, NetworkService.WIRELESS_INTERFACE_REGEX);
-            contentNetwork.set(wlan0 + 1, NetworkService.WIRELESS_ADDRESS_REGEX + "=" + wlan0AddressField);
-            contentNetwork.set(wlan0 + 2, NetworkService.WIRELESS_ROUTERS_REGEX + "=" + wlan0RoutersField);
-            contentNetwork.set(wlan0 + 3, NetworkService.WIRELESS_DOMAINS_REGEX + "=" + wlan0NameServersField);
-        }
-
-        // =======================================================
-        // =======================================================
-        for (int i = 0; i < contentNetwork.size(); i++)
-        {
-            if (contentNetwork.get(i).trim().startsWith(NetworkService.NETWORK_INTERFACE_REGEX))
-            {
-                eth0 = i;
-            }
-        }
-
-        // -------------------------------------------------------
-        if (network.isNetworkDHCP())
-        {
-            for (int i = eth0; i < eth0 + 4; i++)
-            {
-                contentNetwork.remove(eth0);
-            }
-        }
-
-        // =======================================================
-        for (int i = 0; i < contentNetwork.size(); i++)
-        {
-            if (contentNetwork.get(i).trim().startsWith(NetworkService.WIRELESS_INTERFACE_REGEX))
-            {
-                wlan0 = i;
-            }
-        }
-
-        // -------------------------------------------------------
-        if (network.isWirelessDHCP())
-        {
-            for (int i = wlan0; i < wlan0 + 4; i++)
-            {
-                contentNetwork.remove(wlan0);
-            }
-        }
-
-        // =======================================================
-        // =======================================================
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(NetworkService.NETWORK_FILE)))
-        {
-            int emptylines = 0;
-            for (String line : contentNetwork)
-            {
-                if (line != null && line instanceof String && line.trim().length() > 0)
-                {
-                    emptylines = Math.max(0, --emptylines);
-                    bw.write(line);
-                    bw.newLine();
-                }
-                else
-                {
-                    emptylines = Math.max(0, ++emptylines);
-                    if (emptylines < 2)
-                    {
-                        bw.write(line);
-                        bw.newLine();
-                    }
-                }
-            }
-            if (bw != null)
-            {
-                bw.close();
-            }
-        }
-
-        // =======================================================
-        // =======================================================
-        {
-            ProcessBuilder processBuilder = new ProcessBuilder("service", "dhcpcd", "stop");
-            processBuilder.directory(new File("/tmp"));
-            Process p = processBuilder.start();
-            p.waitFor();
-        }
-        {
-            ProcessBuilder processBuilder = new ProcessBuilder("dhclient", "-r", "eth0");
-            processBuilder.directory(new File("/tmp"));
-            Process p = processBuilder.start();
-            p.waitFor();
-        }
-        {
-            ProcessBuilder processBuilder = new ProcessBuilder("dhclient", "-r", "wlan0");
-            processBuilder.directory(new File("/tmp"));
-            Process p = processBuilder.start();
-            p.waitFor();
-        }
-        {
-            ProcessBuilder processBuilder = new ProcessBuilder("service", "dhcpcd", "start");
-            processBuilder.directory(new File("/tmp"));
-            Process p = processBuilder.start();
-            p.waitFor();
-        }
-
-        // =======================================================
-        // =======================================================
-    }
+    }   
 
     // =======================================================
+    
     public void launchWireless() throws Exception
     {
         Runtime.getRuntime().exec(new String[]

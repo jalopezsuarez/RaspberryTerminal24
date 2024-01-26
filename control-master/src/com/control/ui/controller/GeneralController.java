@@ -107,40 +107,6 @@ public class GeneralController extends ViewController
 
             // -------------------------------------------------------
             {
-                LabelTitle labelTitle = new LabelTitle("Teclado en pantalla");
-
-                layout.constrains().weightx = 1.0;
-                layout.add(labelTitle, 0, gridy++);
-            }
-            {
-                LabelText labelText = new LabelText("El teclado en pantalla muestra un teclado visual con todas las teclas estándar. Se puede utilizar con un raton o con una pantalla tactil.");
-
-                layout.constrains().weightx = 1.0;
-                layout.add(labelText, 0, gridy++);
-            }
-            {
-                linkKeyboard = new LinkField("Abrir teclado en pantalla");
-
-                layout.constrains().fill = GridBagConstraints.NONE;
-                layout.constrains().anchor = GridBagConstraints.NORTHWEST;
-                layout.constrains().weightx = 0.0;
-                layout.constrains().weighty = 0.0;
-                layout.constrains().insets = new Insets(10, 20, 0, 10);
-                layout.add(linkKeyboard, 0, gridy++);
-            }
-            {
-                switchKeyboard = new SwitchField(false, "Activado", "Desactivado");
-
-                layout.constrains().fill = GridBagConstraints.NONE;
-                layout.constrains().anchor = GridBagConstraints.NORTHWEST;
-                layout.constrains().weightx = 0.0;
-                layout.constrains().weighty = 0.0;
-                layout.constrains().insets = new Insets(10, 20, 10, 10);
-                layout.add(switchKeyboard, 0, gridy++);
-            }
-
-            // -------------------------------------------------------
-            {
                 JLabel vertical = new JLabel();
 
                 layout.constrains().weightx = 1.0;
@@ -154,8 +120,6 @@ public class GeneralController extends ViewController
             initializeSectionTerminal();
 
             initializeSectionDisplay();
-
-            initializeSectionKeyboard();
 
             // =======================================================
             // =======================================================
@@ -227,44 +191,6 @@ public class GeneralController extends ViewController
 
                         GeneralService generalService = new GeneralService();
                         generalService.depopulateDisplay(switcher.isSelected());
-                    }
-                    catch (Exception ex)
-                    {
-                        JOptionPane.showMessageDialog(null, "Ha ocurrido algun problema con la configuracion.\n" + ex.getMessage(), "Panel de control (General)", JOptionPane.PLAIN_MESSAGE);
-                    }
-                }
-            });
-
-            // -------------------------------------------------------
-            linkKeyboard.addActionListener(new ActionListener()
-            {
-                @Override
-                public void actionPerformed(ActionEvent e)
-                {
-                    try
-                    {
-                        GeneralService generalService = new GeneralService();
-                        generalService.launchKeyboard();
-                    }
-                    catch (Exception ex)
-                    {
-                        JOptionPane.showMessageDialog(null, "Ha ocurrido algun problema con la configuracion.\n" + ex.getMessage(), "Panel de control (General)", JOptionPane.PLAIN_MESSAGE);
-                    }
-                }
-            });
-
-            // -------------------------------------------------------
-            switchKeyboard.addActionListener(new ActionListener()
-            {
-                @Override
-                public void actionPerformed(ActionEvent e)
-                {
-                    try
-                    {
-                        SwitchField switcher = (SwitchField) e.getSource();
-
-                        GeneralService generalService = new GeneralService();
-                        generalService.depopulateKeyboard(switcher.isSelected());
                     }
                     catch (Exception ex)
                     {
@@ -351,16 +277,4 @@ public class GeneralController extends ViewController
         }
     }
 
-    // -------------------------------------------------------
-    private void initializeSectionKeyboard()
-    {
-        try
-        {
-            GeneralService generalService = new GeneralService();
-            switchKeyboard.setSelected(generalService.populateKeyboard());
-        }
-        catch (Exception ex)
-        {
-        }
-    }
 }

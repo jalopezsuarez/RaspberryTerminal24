@@ -6,7 +6,7 @@ public class RemminaService
 {
     // =======================================================
 
-    public final static String REMMINA_LAUNCH_COMMAND = "/usr/bin/remmina";
+    public final static String REMMINA_LAUNCH_COMMAND = "/usr/local/bin/remmina";
     public final static String MONOPUESTO_FLAG = "/home/pi/terms/var/monopuesto.enabled";
 
     // =======================================================
