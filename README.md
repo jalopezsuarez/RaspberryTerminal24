@@ -1295,27 +1295,11 @@ sudo ifdown eth0 && sudo ifup eth0
 sudo ifdown wlan0 && sudo ifup wlan0
 ```
 
-### Manual Wi-Fi Setup (wpa_supplicant)
-
-Open the `wpa-supplicant` configuration file in text editor:
-
-```
-sudo vi /etc/wpa_supplicant/wpa_supplicant.conf
-```
-
-```
-network={
-    ssid="The_ESSID_from_earlier"
-    psk="Your_wifi_password"
-}
-```
-
-### Wi-Fi WPA Supplicant: Auxiliary Commands Tools 
+### Wi-Fi WPA Supplicant: FIX Debian 12 Problems
 
 ```
 sudo chmod 600 /etc/wpa_supplicant/wpa_supplicant.conf
 ```
-
 ```
 sudo vi /etc/wpa_supplicant/wpa_supplicant.conf
 ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
@@ -1323,9 +1307,54 @@ update_config=1
 ```
 
 ```
+sudo vi /lib/systemd/system/wpa_supplicant.service
+```
+```
+[Unit]
+Description=WPA supplicant
+Before=network.target
+After=dbus.service
+Wants=network.target
+IgnoreOnIsolate=true
+
+[Service]
+Type=dbus
+BusName=fi.w1.wpa_supplicant1
+#ExecStart=/sbin/wpa_supplicant -u -s -O "DIR=/run/wpa_supplicant GROUP=netdev"
+ExecStart=/sbin/wpa_supplicant -u -s -c /etc/wpa_supplicant/wpa_supplicant.conf -iwlan0
+Restart=always
+ExecReload=/bin/kill -HUP $MAINPID
+Group=netdev
+RuntimeDirectory=wpa_supplicant
+RuntimeDirectoryMode=0750
+
+[Install]
+WantedBy=multi-user.target
+Alias=dbus-fi.w1.wpa_supplicant1.service
+```
+
+```
+sudo systemctl daemon-reload
+```
+
+### Manual Wi-Fi Setup (wpa_supplicant)
+
+```
 sudo killall wpa_supplicant
-sudo wpa_supplicant -B -iwlan0 -c /etc/wpa_supplicant/wpa_supplicant.conf
+sudo wpa_supplicant -B -c /etc/wpa_supplicant/wpa_supplicant.conf -iwlan0
 sudo wpa_cli -iwlan0 status
+```
+
+Open the `wpa-supplicant` configuration file in text editor:
+
+```
+sudo vi /etc/wpa_supplicant/wpa_supplicant.conf
+```
+```
+network={
+    ssid="The_ESSID_from_earlier"
+    psk="Your_wifi_password"
+}
 ```
 
 ## Supplementary Software Packages
