@@ -1268,72 +1268,21 @@ Graphical User Interface (GUI) tool designed for configuring Wi-Fi networks on t
 sudo apt-get install -y wpagui
 ```
 
-### Manual Network Setup (network interfaces)
+### Install DHCPCD Service
 
-Gestionar las conexiones de red utilizando el archivo `/etc/network/interfaces` editandolo con el editor de textos:
+El servicio `dhcpcd5` gestionara las IP de las interfaces de red tanto de forma dinamica con DHCP como IP estaticas:
 
 ```
-sudo vi /etc/network/interfaces
-```
-
-Network Setup: DHCP (configuration by default)
-```
-# terminal: 25/01/2024 18:49:10
-# Warning! Network configuration automatically generated and modifications may be overwritten and lost.
-
-auto lo
-iface lo inet loopback
-
-auto eth0
-iface eth0 inet dhcp
-
-allow-hotplug wlan0
-iface wlan0 inet dhcp
-wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf
-```
-
-Network Setup: STATIC (sample with static address)
-```
-# terminal: 25/01/2024 18:49:10
-# Warning! Network configuration automatically generated and modifications may be overwritten and lost.
-
-auto lo
-iface lo inet loopback
-
-auto eth0
-iface eth0 inet static
-address 192.168.0.2
-netmask 255.255.255.0
-gateway 192.168.0.1
-dns-nameservers 192.168.0.1
-
-allow-hotplug wlan0
-iface wlan0 inet static
-wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf
-address 192.168.0.3
-netmask 255.255.255.0
-gateway 192.168.0.1
-dns-nameservers 192.168.0.1
+sudo apt-get install -y dhcpcd5
 ```
 
 ```
-sudo ifdown --force --ignore-errors eth0 wlan0
-sudo ifup --force --ignore-errors eth0 wlan0
+sudo systemctl enable dhcpcd.service
 ```
 
-### Wi-Fi WPA Supplicant: FIX Debian 12 Problems
+### Fix networking.service / wpa_supplicant.service:
 
-En caso de fallar el `wpa_supplicant` iniciando el sistema de red `wlan0`:
-
-```
-sudo systemctl --failed
-systemctl status networking.service
-```
-
-```
-sudo systemctl daemon-reload
-sudo systemctl restart networking.service
-```
+Inicialmente los servicios `networking` y `wpa_supplicant` no se inician correctamente debido a un error de serie en `/etc/wpa_supplicant/functions.sh`:
 
 ```
 networking.service - Raise network interfaces
@@ -1355,7 +1304,7 @@ May 22 08:42:26 gate systemd[1]: networking.service: Failed with result 'exit-co
 May 22 08:42:26 gate systemd[1]: Failed to start Raise network interfaces.
 ```
 
-Correccion del modulo `functions.sh`:
+Correccion del modulo `/etc/wpa_supplicant/functions.sh`:
 
 ```
 --(snip)--
@@ -1384,24 +1333,81 @@ Correccion del modulo `functions.sh`:
 --(snip)--
 ```
 
-### Manual Wi-Fi Setup (wpa_supplicant)
+### Configure Networking Service
+
+Configure Networking Service to allow DHCPCD Service control IP. Declare interfaces `eth0` and `wlan0` in manual mode. Indicate where is the wpa_supplicant configuration for wifi networks to `wlan0` interface:
 
 ```
-sudo killall wpa_supplicant
-sudo wpa_supplicant -B -c /etc/wpa_supplicant/wpa_supplicant.conf -iwlan0
+sudo vi /etc/network/interfaces
+```
+
+```
+# interfaces(5) file used by ifup(8) and ifdown(8)
+# Include files from /etc/network/interfaces.d:
+source /etc/network/interfaces.d/*
+
+allow-hotplug eth0
+iface eth0 inet manual
+
+allow-hotplug wlan0
+iface wlan0 inet manual
+wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf
+```
+
+### Configure DHCPCD Service
+
+```
+sudo vi /etc/dhcpcd.conf
+```
+
+```
+# ########################################################
+# Ethernet interface
+
+#interface eth0
+#static ip_address=192.168.0.128/24
+#static routers=192.168.0.1
+#static domain_name_servers=8.8.8.8 8.8.4.4
+
+# ########################################################
+# Wi-Fi interface
+
+interface wlan0
+static ip_address=192.168.0.128/24
+static routers=192.168.0.1
+static domain_name_servers=8.8.8.8 8.8.4.4
+```
+
+### Utilidades Control
+
+Networking Service control references:
+
+```
+sudo ifdown --force --ignore-errors eth0 wlan0
+sudo ifup --force --ignore-errors eth0 wlan0
+```
+
+General Services `systemctl" control references:
+
+```
+sudo systemctl --failed
+systemctl status networking.service
+systemctl status wpa_supplicant.service
+systemctl status dhcpcd.service
+```
+
+```
+sudo systemctl daemon-reload
+sudo systemctl status {service}.service
+sudo systemctl restart {service}.service
+sudo systemctl enable {service}.service
+sudo systemctl disable {service}.service
+```
+
+WPA Supplicant status Check
+
+```
 sudo wpa_cli -iwlan0 status
-```
-
-Open the `wpa-supplicant` configuration file in text editor:
-
-```
-sudo vi /etc/wpa_supplicant/wpa_supplicant.conf
-```
-```
-network={
-    ssid="The_ESSID_from_earlier"
-    psk="Your_wifi_password"
-}
 ```
 
 ## Supplementary Software Packages
