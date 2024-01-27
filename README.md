@@ -887,7 +887,7 @@ chmod +x ~/.config/openbox/autostart.sh
 x11vnc -usepw -repeat -shared -forever &
 
 # Windows Envoronment
-#python /home/pi/terms/bin/remmina.py
+python /home/pi/terms/bin/remmina.py
 idesk &
 tint2 &
 conky -q &
