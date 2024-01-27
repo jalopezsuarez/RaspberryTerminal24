@@ -33,12 +33,12 @@ diskutil unmountDisk /dev/diskX
 
 Now you’re ready to duplicate the SD card, saving it as a disk image file on your hard drive:
 ```
-sudo dd if=/dev/rdiskX of=2024-01-25-terminal.img bs=1m
+sudo dd if=/dev/rdiskX of=2024-01-27-terminal.img bs=1m
 ```
 
 Re-flashing the SD card then becomes:
 ```
-sudo dd if=2024-01-25-terminal.img of=/dev/rdiskX bs=1m
+sudo dd if=2024-01-27-terminal.img of=/dev/rdiskX bs=1m
 ```
 
 ## System: Initial Setup and Advanced Customization for Debian Systems
