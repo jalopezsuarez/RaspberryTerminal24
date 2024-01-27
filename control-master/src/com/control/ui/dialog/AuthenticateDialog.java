@@ -52,7 +52,7 @@ public class AuthenticateDialog extends Dialog
                 layout.add(labelTitle, 0, gridy++);
             }
             {
-                labelMessage = new LabelText("Introduce tus credenciales de usuario para continuar.");
+                labelMessage = new LabelText("Introduce tus credenciales de usuario (v.2024.01.27).");
 
                 layout.constrains().weightx = 1.0;
                 layout.constrains().gridwidth = 2;
