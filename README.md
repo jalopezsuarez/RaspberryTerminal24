@@ -1323,7 +1323,12 @@ En caso de fallar el `wpa_supplicant` iniciando el sistema de red `wlan0`:
 
 ```
 sudo systemctl --failed
-systemctl status networking.service 
+systemctl status networking.service
+```
+
+```
+sudo systemctl daemon-reload
+sudo systemctl restart networking.service
 ```
 
 ```
