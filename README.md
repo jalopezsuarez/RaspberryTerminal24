@@ -1260,26 +1260,6 @@ avoid_warnings=1
 
 ## System Network Configuration (Raspberry Debian Linux)
 
-### wpa_gui - WPA Graphical User Interface
-
-Graphical User Interface (GUI) tool designed for configuring Wi-Fi networks on the Debian Linux system. It is built upon the QT libraries from the KDE environment and serves as a graphical frontend for interacting with wpa_supplicant. This tool enables users to query the current network status, modify configuration settings, and request interactive user input when needed.
-
-```
-sudo apt-get install -y wpagui
-```
-
-### Install DHCPCD Service
-
-El servicio `dhcpcd5` gestionara las IP de las interfaces de red tanto de forma dinamica con DHCP como IP estaticas:
-
-```
-sudo apt-get install -y dhcpcd5
-```
-
-```
-sudo systemctl enable dhcpcd.service
-```
-
 ### Fix networking.service / wpa_supplicant.service:
 
 Inicialmente los servicios `networking` y `wpa_supplicant` no se inician correctamente debido a un error de serie en `/etc/wpa_supplicant/functions.sh`:
@@ -1354,6 +1334,18 @@ iface wlan0 inet manual
 wpa-conf /etc/wpa_supplicant/wpa_supplicant.conf
 ```
 
+### Install DHCPCD Service
+
+El servicio `dhcpcd5` gestionara las IP de las interfaces de red tanto de forma dinamica con DHCP como IP estaticas:
+
+```
+sudo apt-get install -y dhcpcd5
+```
+
+```
+sudo systemctl enable dhcpcd.service
+```
+
 ### Configure DHCPCD Service
 
 ```
@@ -1374,6 +1366,52 @@ sudo vi /etc/dhcpcd.conf
 #static ip_address=192.168.0.200/24
 #static routers=192.168.0.1
 #static domain_name_servers=8.8.8.8 8.8.4.4
+```
+
+### wpa_gui - WPA Graphical User Interface
+
+Graphical User Interface (GUI) tool designed for configuring Wi-Fi networks on the Debian Linux system. It is built upon the QT libraries from the KDE environment and serves as a graphical frontend for interacting with wpa_supplicant. This tool enables users to query the current network status, modify configuration settings, and request interactive user input when needed.
+
+```
+sudo apt-get install -y wpagui
+```
+
+### Wireless Device Blocked by RF-kill
+
+This issue, indicated by the message "RTNETLINK answers: Operation not possible due to RF-kill," can occur on Raspberry Pi 3B and 3B+ models, potentially leading to WiFi dysfunction.
+
+Try Enabling the Wireless Interface: After ensuring that there are no blocks (either hardware or software), try to bring the interface up again with:
+
+```
+sudo ifconfig wlan0 up
+SIOCSIFFLAGS: Operación imposible por estar la radiofrecuencia desactivada
+```
+
+```
+sudo ip link set wlan0 up
+RTNETLINK answers: Operation not possible due to RF-kill
+```
+
+Check RF-kill Status: Use the rfkill command to check the status of all RF devices on your system, including wireless interfaces, to see if they are blocked.
+
+```
+sudo apt-get install rfkill
+```
+
+```
+sudo rfkill list
+0: hci0: Bluetooth
+	Soft blocked: no
+	Hard blocked: no
+1: phy0: Wireless LAN
+	Soft blocked: yes
+	Hard blocked: no
+```
+
+Unblock RF Devices: If the device is blocked by software, unblock it using:
+
+```
+sudo rfkill unblock wifi
 ```
 
 ### Utilidades Control
