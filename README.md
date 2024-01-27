@@ -27,6 +27,10 @@ This will give you a list of the disks and volumes inside or connected to your c
 diskutil list
 ```
 
+```
+diskutil unmountDisk /dev/diskX
+```
+
 Now you’re ready to duplicate the SD card, saving it as a disk image file on your hard drive:
 ```
 sudo dd if=/dev/rdiskX of=2024-01-25-terminal.img bs=1m
